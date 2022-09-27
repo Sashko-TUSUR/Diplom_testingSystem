@@ -28,5 +28,5 @@ public class Student {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "numGroup")
     private Groups numGroup;
-    
+
 }
