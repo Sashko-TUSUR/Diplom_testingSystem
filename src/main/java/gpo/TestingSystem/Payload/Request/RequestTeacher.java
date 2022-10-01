@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestTeacher {
 
+    Long id;
     String name;
     String surname;
     String patronymic;
     String subject;
-    String groupsList;
+    String numGroup;
 }

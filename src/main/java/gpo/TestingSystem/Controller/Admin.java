@@ -3,6 +3,7 @@ package gpo.TestingSystem.Controller;
 
 
 import gpo.TestingSystem.Models.User;
+import gpo.TestingSystem.Payload.Request.RequestAddSubjectForGroup;
 import gpo.TestingSystem.Payload.Request.RequestGroup;
 import gpo.TestingSystem.Payload.Request.RequestSubject;
 import gpo.TestingSystem.Payload.Request.RequestTeacher;
@@ -84,6 +85,25 @@ public class Admin {
     public void addSubject(RequestSubject requestSubject)
     {
         userService.addSubject(requestSubject);
+    }
+    //добавление дисциплину группе
+    @PostMapping("/addSubGroup")
+    public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup)
+    {
+        userService.addSubjectForGroup(subjectForGroup);
+    }
+    //добавление группы преподу
+    @PostMapping("/addSubTeacher")
+    public  void  addSubForTeacher(@RequestParam Long id, @RequestParam String numGroup)
+    {
+        userService.addGroupForTeacher(id,numGroup);
+    }
+
+    //редактирование препода
+    @PutMapping("/editTeacher")
+    public void editTeacher(RequestTeacher requestTeacher)
+    {
+        userService.editTeacher(requestTeacher);
     }
 
 

@@ -3,10 +3,7 @@ package gpo.TestingSystem.Service;
 import gpo.TestingSystem.Enumeration.EnumRole;
 import gpo.TestingSystem.Exception.ResourceNotFoundException;
 import gpo.TestingSystem.Models.*;
-import gpo.TestingSystem.Payload.Request.RequestAddSubjectForGroup;
-import gpo.TestingSystem.Payload.Request.RequestGroup;
-import gpo.TestingSystem.Payload.Request.RequestSubject;
-import gpo.TestingSystem.Payload.Request.RequestTeacher;
+import gpo.TestingSystem.Payload.Request.*;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
 import gpo.TestingSystem.Repositories.*;
 import gpo.TestingSystem.Service.Reg.LoginGeneration;
@@ -48,7 +45,7 @@ public class UserService {
         user.setRoles(Collections.singleton(role));
 
         userRepository.save(user);
-        if(requestTeacher.getGroupsList().trim().length()!=0)
+        if(requestTeacher.getNumGroup().trim().length()!=0)
         {
             Teacher teacher = new Teacher();
             Groups groups = groupsRepository.findById(requestTeacher.getSubject())
@@ -60,7 +57,7 @@ public class UserService {
         if(requestTeacher.getSubject().trim().length()!=0)
         {
             Teacher teacher = new Teacher();
-            Subject subject = subjectRepository.findByNumGroup(requestTeacher.getSubject());
+            Subject subject = subjectRepository.findByName(requestTeacher.getSubject());
             teacher.setSubjects(Collections.singletonList(subject));
             teacherRepository.save(teacher);
         }
@@ -99,12 +96,57 @@ public class UserService {
     //добавление группе предмет
     public ResponseEntity<?> addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup)
     {
-        Subject subject = subjectRepository.findByNumGroup(subjectForGroup.getNumGroup());
+        Subject subject = subjectRepository.findByName(subjectForGroup.getSubject());
         Groups groups = groupsRepository.findById(subjectForGroup.getSubject())
                 .orElseThrow(()-> new ResourceNotFoundException("Такой группы не существует!"));
-        subject.setGroups(Collections.singleton(groups));
+        groups.setSubjects(Collections.singletonList(subject));
+
         return ResponseEntity.ok(new ResponseMessage(true,"Группа добавлена"));
 
+    }
+    //добавление группы преподу
+    public ResponseEntity<?> addGroupForTeacher(Long id, String numGroup)
+    {
+        Teacher teacher = teacherRepository.findById(id).get();
+        Groups groups = groupsRepository.findById(numGroup).get();
+        teacher.setGroups(Collections.singleton(groups));
+        return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
+
+    }
+    //редактирование препода
+ public ResponseEntity<?> editTeacher(RequestTeacher requestTeacher)
+    {
+
+        Teacher teacher = teacherRepository.findById(requestTeacher.getId()).get();
+        User user= userRepository.findById(requestTeacher.getId()).get();
+        try {
+            if (requestTeacher.getNumGroup().trim().length() != 0) {
+                Groups groups = groupsRepository.findById(requestTeacher.getNumGroup()).get();
+                teacher.setGroups(Collections.singleton(groups));
+            }
+            if (requestTeacher.getName().trim().length() != 0) {
+                user.setNameUser(requestTeacher.getName());
+            }
+            if (requestTeacher.getPatronymic().trim().length() != 0) {
+                user.setPatronymic(requestTeacher.getPatronymic());
+            }
+            if (requestTeacher.getSurname().trim().length() != 0) {
+                user.setSurname(requestTeacher.getSurname());
+            }
+            if (requestTeacher.getSubject().trim().length() != 0) {
+                Subject subject = subjectRepository.findByName(requestTeacher.getSubject());
+                teacher.setSubjects(Collections.singletonList(subject));
+            }
+            userRepository.save(user);
+            teacherRepository.save(teacher);
+            return ResponseEntity.ok(new ResponseMessage(true, "Редактирование выполнено!"));
+        }
+        catch (Exception exception)
+        {
+            userRepository.save(user);
+            teacherRepository.save(teacher);
+            return ResponseEntity.ok(new ResponseMessage(false, "Редактирование не удалось!"));
+        }
     }
 
 
