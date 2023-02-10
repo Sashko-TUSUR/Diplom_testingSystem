@@ -1,4 +1,4 @@
-package gpo.TestingSystem.Security;
+package gpo.TestingSystem.Security.Auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import gpo.TestingSystem.Models.User;
@@ -11,27 +11,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class UserDetailsImpl implements UserDetails{
+public class UserDetailsImpl implements UserDetails {
 
     private static final long serialVersionUID = 1L;
+
     private Long id;
     private String login;
-
-    private String name;
-
     @JsonIgnore
     private String password;
-    @JsonIgnore
-    private String surname;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String login, String name, String password, String surname, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long id, String login, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.login = login;
-        this.name = name;
         this.password = password;
-        this.surname = surname;
         this.authorities = authorities;
     }
 
@@ -39,16 +33,22 @@ public class UserDetailsImpl implements UserDetails{
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
+
         return new UserDetailsImpl(
                 user.getUserId(),
                 user.getLogin(),
-                user.getNameUser(),
                 user.getPassword(),
-                user.getSurname(),
                 authorities);
     }
 
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -59,15 +59,6 @@ public class UserDetailsImpl implements UserDetails{
     public String getPassword() {
         return password;
     }
-
-
-    public Long getId(){return id;}
-
-    public String getSurname(){return surname;}
-
-    public String getName(){return  name;}
-
-    public String getLogin(){return  login;}
 
     @Override
     public String getUsername() {
@@ -103,4 +94,3 @@ public class UserDetailsImpl implements UserDetails{
         return Objects.equals(id, user.id);
     }
 }
-

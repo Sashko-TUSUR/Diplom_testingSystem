@@ -1,5 +1,6 @@
 package gpo.TestingSystem.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class User {
     private Long userId;
 
     private String login;
+
     private String password;
     private String nameUser;
     private String patronymic;
@@ -40,4 +42,5 @@ public class User {
         this.Surname = surname;
 
     }
+
 }

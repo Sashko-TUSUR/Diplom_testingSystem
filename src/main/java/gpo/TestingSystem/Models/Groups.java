@@ -18,6 +18,8 @@ import java.util.List;
 public class Groups {
 
     @Id
+    private Long idGroup;
+
     private String numGroup;
 
     @ManyToMany(mappedBy = "groups")

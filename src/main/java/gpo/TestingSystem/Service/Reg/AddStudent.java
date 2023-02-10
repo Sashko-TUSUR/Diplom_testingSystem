@@ -24,7 +24,7 @@ public class AddStudent {
 
         List<Student> students = new ArrayList<Student>();
         String numGroup = ExcelHelper.numGroup;
-        Groups groups = groupsRepository.findById(numGroup).get();
+        Groups groups = groupsRepository.findById(Long.parseLong(numGroup)).get();
 
         for(int i=0;i< userList.size();i++)
         {

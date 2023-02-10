@@ -52,6 +52,12 @@ public class Admin {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(false, message));
     }
 
+
+
+
+
+
+
     @GetMapping("/tutorials")
     public ResponseEntity<List<User>> getAllTutorials() {
         try {
@@ -69,42 +75,42 @@ public class Admin {
 
     //добавление препода
     @PostMapping("/Teacher")
-    public ResponseEntity<?> addTeacher(RequestTeacher requestTeacher)
+    public ResponseEntity<?> addTeacher(@RequestBody RequestTeacher requestTeacher)
     {
         userService.addTeacher(requestTeacher);
         return ResponseEntity.ok(new ResponseMessage(true,"Преподаватель добавлен"));
     }
     //добавление группы
     @PostMapping("/addGroup")
-     public void addGroup(RequestGroup requestGroup)
+     public void addGroup(@RequestBody RequestGroup requestGroup)
     {
         userService.addGroup(requestGroup);
     }
     //добавление дисциплины
     @PostMapping("/addSubject")
-    public void addSubject(RequestSubject requestSubject)
+    public void addSubject(@RequestBody RequestSubject requestSubject)
     {
         userService.addSubject(requestSubject);
     }
     //добавление дисциплину группе
     @PostMapping("/addSubGroup")
-    public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup)
+    public void addSubjectForGroup(@RequestBody RequestAddSubjectForGroup subjectForGroup)
     {
         userService.addSubjectForGroup(subjectForGroup);
     }
     //добавление группы преподу
     @PostMapping("/addSubTeacher")
-    public  void  addSubForTeacher(@RequestParam Long id, @RequestParam String numGroup)
+    public  void  addSubForTeacher(@RequestParam Long id, @RequestParam Long idGroup)
     {
-        userService.addGroupForTeacher(id,numGroup);
+        userService.addGroupForTeacher(id,idGroup);
     }
-
+/*
     //редактирование препода
     @PutMapping("/editTeacher")
     public void editTeacher(RequestTeacher requestTeacher)
     {
         userService.editTeacher(requestTeacher);
     }
-
+*/
 
 }

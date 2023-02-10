@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestTeacher {
 
-    Long id;
+    Long idGroup;
     String name;
     String surname;
     String patronymic;

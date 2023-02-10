@@ -26,7 +26,7 @@ public class Student {
 
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "numGroup")
+    @JoinColumn(name = "idGroup")
     private Groups numGroup;
 
 }

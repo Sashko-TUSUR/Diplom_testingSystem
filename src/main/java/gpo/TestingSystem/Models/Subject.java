@@ -32,7 +32,7 @@ public class Subject {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="subject_group",joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Set<Groups> groups = new HashSet<>();
 
 

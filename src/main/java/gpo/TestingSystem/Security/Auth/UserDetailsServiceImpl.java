@@ -1,4 +1,4 @@
-package gpo.TestingSystem.Security;
+package gpo.TestingSystem.Security.Auth;
 
 import gpo.TestingSystem.Models.User;
 import gpo.TestingSystem.Repositories.UserRepository;
@@ -12,17 +12,18 @@ import javax.transaction.Transactional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     @Autowired
     UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userRepository.findByLogin(login)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + login));
+
+            User user = userRepository.findByLogin(login);
+            if(user==null) {
+                new UsernameNotFoundException("User Not Found with username: " + login);
+            }
 
         return UserDetailsImpl.build(user);
     }
-
 }
