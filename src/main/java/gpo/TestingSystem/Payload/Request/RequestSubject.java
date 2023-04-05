@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestSubject {
 
+    Long idSubject;
     String name;
 }

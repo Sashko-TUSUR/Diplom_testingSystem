@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -25,4 +25,44 @@ public class TemplateTest {
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Complexity complexities ;
 
+
+    public Long getTemplateId() {
+        return templateId;
+    }
+
+    public void setTemplateId(Long templateId) {
+        this.templateId = templateId;
+    }
+
+    public String getTypeTest() {
+        return typeTest;
+    }
+
+    public void setTypeTest(String typeTest) {
+        this.typeTest = typeTest;
+    }
+
+    public Long getStartTest() {
+        return startTest;
+    }
+
+    public void setStartTest(Long startTest) {
+        this.startTest = startTest;
+    }
+
+    public Long getEndTest() {
+        return endTest;
+    }
+
+    public void setEndTest(Long endTest) {
+        this.endTest = endTest;
+    }
+
+    public Complexity getComplexities() {
+        return complexities;
+    }
+
+    public void setComplexities(Complexity complexities) {
+        this.complexities = complexities;
+    }
 }

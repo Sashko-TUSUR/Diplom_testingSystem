@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "teacher")
@@ -27,12 +27,33 @@ public class Teacher {
     private User user;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
     @JoinTable(name = "teacher_group",
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "groups_id"))
     private Set<Groups> teacher_group = new HashSet<>();
 
+    public Long getUserId() {
+        return userId;
+    }
 
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Groups> getTeacher_group() {
+        return teacher_group;
+    }
+
+    public void setTeacher_group(Set<Groups> teacher_group) {
+        this.teacher_group = teacher_group;
+    }
 }

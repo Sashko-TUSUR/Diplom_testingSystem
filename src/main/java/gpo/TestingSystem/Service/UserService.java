@@ -125,7 +125,24 @@ public class UserService {
 
     }
 
-    //добавление группе предмет
+    //Редактирование дисциплины * отменить, если уже есть с таким названием
+    public void editSubject(RequestSubject requestSubject)
+    {
+        Subject subject = subjectRepository.findById(requestSubject.getIdSubject()).get();
+
+        subject.setName(requestSubject.getName());
+
+        subjectRepository.save(subject);
+
+    }
+
+    //удаление дисциплины *
+    public void delSubject(RequestSubject requestSubject)
+    {
+       subjectRepository.deleteById(requestSubject.getIdSubject());
+    }
+
+    //добавление группе дисциплину
     public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup)
     {
         Subject subject = subjectRepository.findById(subjectForGroup.getIdSubject()).get();
@@ -193,7 +210,13 @@ public class UserService {
 
     }
 
-    //удаление пользователя
+    //удаление группы
+    public void delGroup(RequestGroup requestGroup)
+    {
+        groupsRepository.deleteById(requestGroup.getIdGroup());
+    }
+
+    //удаление пользователя * ответ, если нет такого пользователя
     public void delUser(RequestStudent requestStudent)
     {
         System.out.println(requestStudent.getIdUser());

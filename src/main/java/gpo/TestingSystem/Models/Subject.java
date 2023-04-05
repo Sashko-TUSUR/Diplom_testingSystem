@@ -2,16 +2,16 @@ package gpo.TestingSystem.Models;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-@Data
+import java.util.List;
+
+
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -34,4 +34,27 @@ public class Subject {
    private List<Groups> groups = new ArrayList<>();
 
 
+    public Long getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Long subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Groups> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Groups> groups) {
+        this.groups = groups;
+    }
 }

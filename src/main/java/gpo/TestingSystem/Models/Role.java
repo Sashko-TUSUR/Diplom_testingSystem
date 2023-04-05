@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -20,4 +20,20 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     private EnumRole name;
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public EnumRole getName() {
+        return name;
+    }
+
+    public void setName(EnumRole name) {
+        this.name = name;
+    }
 }

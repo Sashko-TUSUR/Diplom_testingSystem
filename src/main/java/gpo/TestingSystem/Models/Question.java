@@ -2,12 +2,12 @@ package gpo.TestingSystem.Models;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -25,4 +25,37 @@ public class Question {
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Complexity complexities ;
+
+
+    public Long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Long questionId) {
+        this.questionId = questionId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
+
+    public Complexity getComplexities() {
+        return complexities;
+    }
+
+    public void setComplexities(Complexity complexities) {
+        this.complexities = complexities;
+    }
 }

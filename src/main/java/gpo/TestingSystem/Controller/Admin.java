@@ -51,8 +51,6 @@ public class Admin {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(false, message));
     }
 
-
-
     @GetMapping("/tutorials")
     public ResponseEntity<List<User>> getAllTutorials() {
         try {
@@ -69,14 +67,12 @@ public class Admin {
     }
 
     //добавление препода *
-
     @PostMapping("/Teacher")
     public ResponseEntity<?> addTeacher(@RequestBody RequestTeacher requestTeacher)
     {
         userService.addTeacher(requestTeacher);
         return ResponseEntity.ok(new ResponseMessage(true,"Преподаватель добавлен"));
     }
-
 
     //добавление группы *
     @PostMapping("/addGroup")
@@ -99,6 +95,13 @@ public class Admin {
         userService.renameGroup(requestGroup);
         return ResponseEntity.ok(new ResponseMessage(true,"Группа переименована"));
     }
+    //удаление группы
+    @DeleteMapping("/delGroup")
+    public  ResponseEntity<?> delGroup(@RequestBody RequestGroup requestGroup)
+    {
+        userService.delGroup(requestGroup);
+        return ResponseEntity.ok(new ResponseMessage(true,"Группа удалена"));
+    }
 
     //добавление дисциплины *
     @PostMapping("/addSubject")
@@ -114,6 +117,23 @@ public class Admin {
         }
 
     }
+
+    //редактирование дисциплины *
+    @PutMapping("/editSubject")
+    public ResponseEntity<?> editSubject(@RequestBody RequestSubject requestSubject)
+    {
+        userService.editSubject(requestSubject);
+        return ResponseEntity.ok(new ResponseMessage(true,"Дисциплина изменена"));
+    }
+
+    //удаление дисциплины*
+    @DeleteMapping("/delSubject")
+    public ResponseEntity<?> delSubject(@RequestBody RequestSubject requestSubject)
+    {
+        userService.delSubject(requestSubject);
+        return ResponseEntity.ok(new ResponseMessage(true,"Дисциплина удалена"));
+    }
+
     //добавление дисциплины группе *ответы поправить
   @PostMapping("/addSubGroup")
     public ResponseEntity<?> addSubjectForGroup(@RequestBody RequestAddSubjectForGroup subjectForGroup)
