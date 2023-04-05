@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Null;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -44,7 +46,6 @@ public class UserService {
         }*/
         User user = new User();
         user.setLogin(signUpRequest.getLogin());
-        user.setPassword(signUpRequest.getPassword());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
 
         Role roles = roleRepository.findByName(EnumRole.ROLE_ADMIN).get();
@@ -53,98 +54,101 @@ public class UserService {
     }
 
 
-    //добавление преподов
+    //добавление преподов ///ПОРАБОТАТЬ НАД ЛОГИКОЙ!!!!
     public void addTeacher(RequestTeacher requestTeacher)
     {
-        System.out.println(requestTeacher.getSurname());
-        System.out.println(requestTeacher.getName());
-        System.out.println(requestTeacher.getPatronymic());
-        System.out.println(requestTeacher.getNumGroup());
-        Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
+        try {
 
-        User user = new User();
-        user.setLogin(LoginGeneration.loginGeneration(requestTeacher.getName(),requestTeacher.getSurname()));
-        user.setPassword(PasswordGeneration.passwordGeneration());
-        user.setNameUser(requestTeacher.getName());
-        user.setSurname(requestTeacher.getSurname());
-        user.setPatronymic(requestTeacher.getPatronymic());
-        user.setRoles(Collections.singleton(role));
 
-        if(requestTeacher.getIdGroup() != null)
-        {
             Teacher teacher = new Teacher();
-            Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
-            System.out.println(groups.getNumGroup());
-            System.out.println("end1");
+            Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
+            User user = new User();
+            user.setLogin(LoginGeneration.loginGeneration(requestTeacher.getName(), requestTeacher.getSurname()));
+            user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
+            user.setNameUser(requestTeacher.getName());
+            user.setSurname(requestTeacher.getSurname());
+            user.setPatronymic(requestTeacher.getPatronymic());
+            user.setRoles(Collections.singleton(role));
+
+            // добавление группы
+            if (requestTeacher.getIdGroup() != null) {
+                //Teacher teacher = new Teacher();
+                Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
+                System.out.println(groups.getNumGroup());
+                System.out.println("end1");
+                teacher.setUser(user);
+                System.out.println("end2");
+               // teacher.setGroups(Collections.singleton(groups));
+                System.out.println("end3");
+                teacherRepository.save(teacher);
+            }
+
+            //добавление предмета
+            if (requestTeacher.getSubject() != null) {
+                //Teacher teacher = new Teacher();
+                Subject subject = subjectRepository.findByName(requestTeacher.getSubject());
+                //teacher.setSubjects(Collections.singleton(subject));
+                teacherRepository.save(teacher);
+            }
+
+            userRepository.save(user);
             teacher.setUser(user);
-            System.out.println("end2");
-            teacher.setGroups(Collections.singleton(groups));
-            System.out.println("end3");
             teacherRepository.save(teacher);
         }
-
-        if(requestTeacher.getSubject() != null)
-        {
-            Teacher teacher = new Teacher();
-            Subject subject = subjectRepository.findByName(requestTeacher.getSubject());
-            teacher.setSubjects(Collections.singletonList(subject));
-            teacherRepository.save(teacher);
-        }
-        userRepository.save(user);
+        catch (Throwable t) {}
     }
 
-    //добавление группы
-    public ResponseEntity<?> addGroup(RequestGroup requestGroup)
+    //добавление группы * поработать над тем,если не будет трай
+    public void addGroup(RequestGroup requestGroup)
     {
         try {
+
             Groups groups = new Groups();
             groups.setNumGroup(requestGroup.getNumGroup());
-            return ResponseEntity.ok(new ResponseMessage(true,"Группа добавлена"));
+            groupsRepository.save(groups);
         }
-        catch (Exception exception)
-        {
-            return ResponseEntity.ok(new ResponseMessage(false,"Группа с таким номером уже существет!"));
-        }
+        catch (Throwable t) {
 
+        }
     }
-    //добавление дисциплины
-    public  ResponseEntity<?> addSubject(RequestSubject requestSubject)
+    //добавление дисциплины *
+    public void addSubject(RequestSubject requestSubject)
     {
         try {
             Subject subject = new Subject();
             subject.setName(requestSubject.getName());
-            return ResponseEntity.ok(new ResponseMessage(true,"Предмет добавлена"));
+            subjectRepository.save(subject);
         }
-        catch (Exception exception)
-        {
-            return ResponseEntity.ok(new ResponseMessage(false,"Такой предмет уже существует!"));
+        catch (Throwable t) {
+
         }
 
     }
 
     //добавление группе предмет
-    public ResponseEntity<?> addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup)
+    public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup)
     {
-        Subject subject = subjectRepository.findByName(subjectForGroup.getSubject());
-        Groups groups = groupsRepository.findById(subjectForGroup.getIdGroup())
-                .orElseThrow(()-> new ResourceNotFoundException("Такой группы не существует!"));
-        groups.setSubjects(Collections.singletonList(subject));
-
-        return ResponseEntity.ok(new ResponseMessage(true,"Группа добавлена"));
-
-    }
-    //добавление группы преподу
-    public ResponseEntity<?> addGroupForTeacher(Long id, Long idGroup)
-    {
-        Teacher teacher = teacherRepository.findById(id).get();
-        Groups groups = groupsRepository.findById(idGroup).get();
-        teacher.setGroups(Collections.singleton(groups));
-        return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
-
+        Subject subject = subjectRepository.findById(subjectForGroup.getIdSubject()).get();
+        Groups groups = groupsRepository.findById(subjectForGroup.getIdGroup()).get();
+        groups.getSubjects().add(subject);
+        groupsRepository.save(groups);
     }
 
-    /*
+    //добавление группы преподу *
+    public void addGroupTeacher(RequestTeacher requestTeacher) {
+
+        Teacher teacher = teacherRepository.findById(requestTeacher.getIdTeach()).get();
+        Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
+
+        teacher.getTeacher_group().add(groups);
+
+        teacherRepository.save(teacher);
+
+
+    }
+
     //редактирование препода
+    /*
  public ResponseEntity<?> editTeacher(RequestTeacher requestTeacher)
     {
 
@@ -180,7 +184,21 @@ public class UserService {
         }
     }
 */
+    // редактирование группы
+    public void renameGroup(RequestGroup requestGroup)
+    {
+        Groups groups = groupsRepository.findById(requestGroup.getIdGroup()).get();
+        groups.setNumGroup(requestGroup.getNumGroup());
+        groupsRepository.save(groups);
 
+    }
+
+    //удаление пользователя
+    public void delUser(RequestStudent requestStudent)
+    {
+        System.out.println(requestStudent.getIdUser());
+        userRepository.deleteById(requestStudent.getIdUser());
+    }
 
 
 

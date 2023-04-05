@@ -27,12 +27,12 @@ public class Teacher {
     private User user;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="teacher_groups",joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "numGroup"))
-    private Set<Groups> groups = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "teacher_group",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "groups_id"))
+    private Set<Groups> teacher_group = new HashSet<>();
 
-    @ManyToMany(mappedBy = "teachers")
-    private List<Subject> subjects = new ArrayList<>();
+
 
 }

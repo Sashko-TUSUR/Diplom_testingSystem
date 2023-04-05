@@ -25,15 +25,13 @@ public class Subject {
     private String name;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="subject_teacher",joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<Teacher> teachers = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name="subject_teacher",joinColumns = @JoinColumn(name = "subject_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private Set<Teacher> teachers = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="subject_group",joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private Set<Groups> groups = new HashSet<>();
+   @ManyToMany(mappedBy = "subjects",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   private List<Groups> groups = new ArrayList<>();
 
 
 }
