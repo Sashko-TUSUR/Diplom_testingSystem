@@ -28,7 +28,7 @@ public class Groups {
 //    @ManyToMany(mappedBy = "teacher_group")
 //    private Set<Teacher> teachers= new HashSet<>();
 
-   @OneToMany(mappedBy = "numGroup", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+   @OneToMany(mappedBy = "idGroup", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
    private Set<Student> student = new HashSet<>();
 
 

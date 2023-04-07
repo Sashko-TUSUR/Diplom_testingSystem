@@ -27,7 +27,7 @@ public class Student {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "idGroup")
-    private Groups numGroup ;
+    private Groups idGroup ;
 
 
     public Long getUserId() {
@@ -46,11 +46,11 @@ public class Student {
         this.user = user;
     }
 
-    public Groups getNumGroup() {
-        return numGroup;
+    public Groups getIdGroup() {
+        return idGroup;
     }
 
-    public void setNumGroup(Groups numGroup) {
-        this.numGroup = numGroup;
+    public void setIdGroup(Groups idGroup) {
+        this.idGroup = idGroup;
     }
 }

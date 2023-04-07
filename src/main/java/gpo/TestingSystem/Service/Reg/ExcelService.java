@@ -24,12 +24,8 @@ public class ExcelService {
         try {
             List<User> users = ExcelHelper.excelToUsers(file.getInputStream());
 
-            System.out.println("save1");
             userRepository.saveAll(users);
-            System.out.println("save2");
             addStudent.addStudent(users);
-            System.out.println("save3");
-
 
         } catch (IOException e) {
             throw new RuntimeException("fail to store excel data: " + e.getMessage());

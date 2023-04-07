@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -24,11 +25,8 @@ public class Subject {
 
     private String name;
 
-
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name="subject_teacher",joinColumns = @JoinColumn(name = "subject_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private Set<Teacher> teachers = new HashSet<>();
+    @ManyToMany(mappedBy = "subject",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Teacher> teachers = new ArrayList<>();
 
    @ManyToMany(mappedBy = "subjects",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
    private List<Groups> groups = new ArrayList<>();
@@ -56,5 +54,13 @@ public class Subject {
 
     public void setGroups(List<Groups> groups) {
         this.groups = groups;
+    }
+
+    public List<Teacher> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(List<Teacher> teachers) {
+        this.teachers = teachers;
     }
 }

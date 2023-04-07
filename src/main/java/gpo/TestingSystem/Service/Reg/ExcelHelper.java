@@ -90,7 +90,6 @@ public class ExcelHelper {
                         case 3 -> {
                             currentCell.setCellType(CellType.STRING);
                             numGroup = currentCell.getStringCellValue();
-
                         }
                         default -> {
                         }

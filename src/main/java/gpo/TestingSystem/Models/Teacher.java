@@ -33,6 +33,11 @@ public class Teacher {
             inverseJoinColumns = @JoinColumn(name = "groups_id"))
     private Set<Groups> teacher_group = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name="teacher_subject",joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+    private Set<Subject> subject = new HashSet<>();
+
     public Long getUserId() {
         return userId;
     }
@@ -55,5 +60,13 @@ public class Teacher {
 
     public void setTeacher_group(Set<Groups> teacher_group) {
         this.teacher_group = teacher_group;
+    }
+
+    public Set<Subject> getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Set<Subject> subject) {
+        this.subject = subject;
     }
 }

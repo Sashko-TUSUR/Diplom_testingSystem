@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestAddTopic {
+public class RequestTopic {
 
     String name;
     Long id_didactic;

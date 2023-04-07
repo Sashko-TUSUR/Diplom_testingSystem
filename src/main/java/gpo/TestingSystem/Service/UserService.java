@@ -38,12 +38,9 @@ public class UserService {
     PasswordEncoder encoder;
 
 
+    //добавление админа
     public void createUser(SignUpRequest signUpRequest) {
 
-     /*  User byEmail = userRepository.findByLogin(signUpRequest.getEmail());
-        if (!equals(byEmail)) {
-            throw new RuntimeException("Пользователь с таким email " + byEmail + " уже зарегистирован");
-        }*/
         User user = new User();
         user.setLogin(signUpRequest.getLogin());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
@@ -53,81 +50,109 @@ public class UserService {
         userRepository.save(user);
     }
 
-
-    //добавление преподов ///ПОРАБОТАТЬ НАД ЛОГИКОЙ!!!!
-    public void addTeacher(RequestTeacher requestTeacher)
+    //добавление студента *
+    public void createStudent (RequestStudent requestStudent)
     {
-        try {
+        Student student = new Student();
+        Role role = roleRepository.findByName(EnumRole.ROLE_STUDENT).get();
+        User user = new User();
+        user.setLogin(LoginGeneration.loginGeneration(requestStudent.getName(), requestStudent.getSurname()));
+        user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
+        user.setNameUser(requestStudent.getName());
+        user.setSurname(requestStudent.getSurname());
+        user.setPatronymic(requestStudent.getPatronymic());
+        user.setRoles(Collections.singleton(role));
 
-
-            Teacher teacher = new Teacher();
-            Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
-            User user = new User();
-            user.setLogin(LoginGeneration.loginGeneration(requestTeacher.getName(), requestTeacher.getSurname()));
-            user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
-            user.setNameUser(requestTeacher.getName());
-            user.setSurname(requestTeacher.getSurname());
-            user.setPatronymic(requestTeacher.getPatronymic());
-            user.setRoles(Collections.singleton(role));
-
-            // добавление группы
-            if (requestTeacher.getIdGroup() != null) {
-                //Teacher teacher = new Teacher();
-                Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
-                System.out.println(groups.getNumGroup());
-                System.out.println("end1");
-                teacher.setUser(user);
-                System.out.println("end2");
-               // teacher.setGroups(Collections.singleton(groups));
-                System.out.println("end3");
-                teacherRepository.save(teacher);
-            }
-
-            //добавление предмета
-            if (requestTeacher.getSubject() != null) {
-                //Teacher teacher = new Teacher();
-                Subject subject = subjectRepository.findByName(requestTeacher.getSubject());
-                //teacher.setSubjects(Collections.singleton(subject));
-                teacherRepository.save(teacher);
-            }
-
-            userRepository.save(user);
-            teacher.setUser(user);
-            teacherRepository.save(teacher);
+        if (requestStudent.getIdGroup() != null) {
+            Groups groups = groupsRepository.findById(requestStudent.getIdGroup()).get();
+            student.setIdGroup(groups);
         }
-        catch (Throwable t) {}
+
+        userRepository.save(user);
+        student.setUser(user);
+        studentRepository.save(student);
+
+
     }
 
-    //добавление группы * поработать над тем,если не будет трай
-    public void addGroup(RequestGroup requestGroup)
+    //редактирование студента
+    public void editStudent(RequestStudent requestStudent)
     {
+        User user = userRepository.findById(requestStudent.getIdUser()).get();
+        Student student = studentRepository.findById(user.getUserId()).get();
+
+        if (requestStudent.getName() != null) {
+            user.setNameUser(requestStudent.getName());
+        }
+        if (requestStudent.getSurname() != null) {
+            user.setSurname(requestStudent.getSurname());
+        }
+
+        if (requestStudent.getPatronymic() != null) {
+            user.setPatronymic(requestStudent.getPatronymic());
+        }
+        if (requestStudent.getIdGroup() != null) {
+            Groups groups = groupsRepository.findById(requestStudent.getIdGroup()).get();
+            student.setIdGroup(groups);
+        }
+        studentRepository.save(student);
+        userRepository.save(user);
+    }
+
+    //добавление преподов *
+    public void createTeacher(RequestTeacher requestTeacher) {
+
+        Teacher teacher = new Teacher();
+        Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
+        User user = new User();
+        user.setLogin(LoginGeneration.loginGeneration(requestTeacher.getName(), requestTeacher.getSurname()));
+        user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
+        user.setNameUser(requestTeacher.getName());
+        user.setSurname(requestTeacher.getSurname());
+        user.setPatronymic(requestTeacher.getPatronymic());
+        user.setRoles(Collections.singleton(role));
+
+        if (requestTeacher.getIdSubject() != null) {
+            Subject subject = subjectRepository.findById(requestTeacher.getIdSubject()).get();
+            teacher.getSubject().add(subject);
+        }
+        if (requestTeacher.getIdGroup() != null) {
+            Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
+            teacher.getTeacher_group().add(groups);
+        }
+
+        userRepository.save(user);
+        teacher.setUser(user);
+        teacherRepository.save(teacher);
+
+    }
+
+    //добавление группы * ОТВЕТ НА ТО, ЕСЛИ ЕСТЬ УЖЕ ТАКАЯ ГРУППА
+    public void createGroup(RequestGroup requestGroup) {
         try {
 
             Groups groups = new Groups();
             groups.setNumGroup(requestGroup.getNumGroup());
             groupsRepository.save(groups);
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
 
         }
     }
+
     //добавление дисциплины *
-    public void addSubject(RequestSubject requestSubject)
-    {
+    public void createSubject(RequestSubject requestSubject) {
         try {
             Subject subject = new Subject();
             subject.setName(requestSubject.getName());
             subjectRepository.save(subject);
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
 
         }
 
     }
 
     //Редактирование дисциплины * отменить, если уже есть с таким названием
-    public void editSubject(RequestSubject requestSubject)
-    {
+    public void editSubject(RequestSubject requestSubject) {
         Subject subject = subjectRepository.findById(requestSubject.getIdSubject()).get();
 
         subject.setName(requestSubject.getName());
@@ -137,14 +162,12 @@ public class UserService {
     }
 
     //удаление дисциплины *
-    public void delSubject(RequestSubject requestSubject)
-    {
-       subjectRepository.deleteById(requestSubject.getIdSubject());
+    public void delSubject(RequestSubject requestSubject) {
+        subjectRepository.deleteById(requestSubject.getIdSubject());
     }
 
     //добавление группе дисциплину
-    public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup)
-    {
+    public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup) {
         Subject subject = subjectRepository.findById(subjectForGroup.getIdSubject()).get();
         Groups groups = groupsRepository.findById(subjectForGroup.getIdGroup()).get();
         groups.getSubjects().add(subject);
@@ -154,56 +177,45 @@ public class UserService {
     //добавление группы преподу *
     public void addGroupTeacher(RequestTeacher requestTeacher) {
 
-        Teacher teacher = teacherRepository.findById(requestTeacher.getIdTeach()).get();
+        Teacher teacher = teacherRepository.findById(requestTeacher.getIdUser()).get();
         Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
-
         teacher.getTeacher_group().add(groups);
 
         teacherRepository.save(teacher);
 
+    }
+
+    //редактирование препода *
+    public void editTeacher(RequestTeacher requestTeacher) {
+
+        User user = userRepository.findById(requestTeacher.getIdUser()).get();
+        Teacher teacher = teacherRepository.findById(user.getUserId()).get();
+
+        if (requestTeacher.getName() != null) {
+            user.setNameUser(requestTeacher.getName());
+        }
+        if (requestTeacher.getSurname() != null) {
+            user.setSurname(requestTeacher.getSurname());
+        }
+
+        if (requestTeacher.getPatronymic() != null) {
+            user.setPatronymic(requestTeacher.getPatronymic());
+        }
+        if (requestTeacher.getIdSubject() != null) {
+            Subject subject = subjectRepository.findById(requestTeacher.getIdSubject()).get();
+            teacher.getSubject().add(subject);
+        }
+        if (requestTeacher.getIdGroup() != null) {
+            Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
+            teacher.getTeacher_group().add(groups);
+        }
+        teacherRepository.save(teacher);
+        userRepository.save(user);
 
     }
 
-    //редактирование препода
-    /*
- public ResponseEntity<?> editTeacher(RequestTeacher requestTeacher)
-    {
-
-        Teacher teacher = teacherRepository.findById(requestTeacher.getId()).get();
-        User user= userRepository.findById(requestTeacher.getId()).get();
-        try {
-            if (requestTeacher.getNumGroup().trim().length() != 0) {
-                Groups groups = groupsRepository.findById(requestTeacher.getNumGroup()).get();
-                teacher.setGroups(Collections.singleton(groups));
-            }
-            if (requestTeacher.getName().trim().length() != 0) {
-                user.setNameUser(requestTeacher.getName());
-            }
-            if (requestTeacher.getPatronymic().trim().length() != 0) {
-                user.setPatronymic(requestTeacher.getPatronymic());
-            }
-            if (requestTeacher.getSurname().trim().length() != 0) {
-                user.setSurname(requestTeacher.getSurname());
-            }
-            if (requestTeacher.getSubject().trim().length() != 0) {
-                Subject subject = subjectRepository.findByName(requestTeacher.getSubject());
-                teacher.setSubjects(Collections.singletonList(subject));
-            }
-            userRepository.save(user);
-            teacherRepository.save(teacher);
-            return ResponseEntity.ok(new ResponseMessage(true, "Редактирование выполнено!"));
-        }
-        catch (Exception exception)
-        {
-            userRepository.save(user);
-            teacherRepository.save(teacher);
-            return ResponseEntity.ok(new ResponseMessage(false, "Редактирование не удалось!"));
-        }
-    }
-*/
     // редактирование группы
-    public void renameGroup(RequestGroup requestGroup)
-    {
+    public void renameGroup(RequestGroup requestGroup) {
         Groups groups = groupsRepository.findById(requestGroup.getIdGroup()).get();
         groups.setNumGroup(requestGroup.getNumGroup());
         groupsRepository.save(groups);
@@ -211,17 +223,16 @@ public class UserService {
     }
 
     //удаление группы
-    public void delGroup(RequestGroup requestGroup)
-    {
+    public void delGroup(RequestGroup requestGroup) {
         groupsRepository.deleteById(requestGroup.getIdGroup());
     }
 
     //удаление пользователя * ответ, если нет такого пользователя
-    public void delUser(RequestStudent requestStudent)
-    {
+    public void delUser(RequestStudent requestStudent) {
         System.out.println(requestStudent.getIdUser());
         userRepository.deleteById(requestStudent.getIdUser());
     }
+
 
 
 

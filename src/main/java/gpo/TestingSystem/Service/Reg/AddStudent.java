@@ -24,24 +24,19 @@ public class AddStudent {
     public void addStudent(List<User> userList) {
 
         List<Student> students = new ArrayList<Student>();
-        System.out.println("addstudent1");
         String numGroup = ExcelHelper.numGroup;
-        System.out.println("addstudent2");
         Groups groups = groupsRepository.findByNumGroup(numGroup);
-
-        System.out.println("addstudent3");
         for(int i=0;i< userList.size();i++)
         {
             Student student = new Student();
             student.setUser(userList.get(i));
-            student.setNumGroup(groups);
+            student.setIdGroup(groups);
             students.add(student);
 
         }
 
-        System.out.println("addstudent4");
         studentRepository.saveAll(students);
-        System.out.println("addstudent5");
+
     }
 
 

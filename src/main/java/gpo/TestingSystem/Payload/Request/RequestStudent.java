@@ -13,5 +13,5 @@ public class RequestStudent {
     String name;
     String surname;
     String patronymic;
-    String numGroup;
+    Long idGroup;
 }

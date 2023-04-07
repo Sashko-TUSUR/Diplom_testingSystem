@@ -2,8 +2,8 @@ package gpo.TestingSystem.Service;
 
 import gpo.TestingSystem.Models.DidacticUnit;
 import gpo.TestingSystem.Models.Topic;
-import gpo.TestingSystem.Payload.Request.RequestAddDidacticUnit;
-import gpo.TestingSystem.Payload.Request.RequestAddTopic;
+import gpo.TestingSystem.Payload.Request.RequestDidacticUnit;
+import gpo.TestingSystem.Payload.Request.RequestTopic;
 import gpo.TestingSystem.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class UserServiceTeacher {
 
 
     //создание дидактической еденицы
-    public void addDidacticUnit(RequestAddDidacticUnit requestAddDidacticUnit)
+    public void addDidacticUnit(RequestDidacticUnit requestAddDidacticUnit)
     {
         DidacticUnit didacticUnit = new DidacticUnit();
         didacticUnit.setName(requestAddDidacticUnit.getName());
@@ -38,11 +38,11 @@ public class UserServiceTeacher {
         didacticUnitRepository.save(didacticUnit);
     }
     //создание темы
-    public void addTopic(RequestAddTopic requestAddTopic)
+    public void addTopic(RequestTopic requestTopic)
     {
         Topic topic = new Topic();
-        topic.setName(requestAddTopic.getName());
-        DidacticUnit didacticUnit = didacticUnitRepository.findById(requestAddTopic.getId_didactic()).get();
+        topic.setName(requestTopic.getName());
+        DidacticUnit didacticUnit = didacticUnitRepository.findById(requestTopic.getId_didactic()).get();
         topic.setDidacticUnit(didacticUnit);
         topicRepository.save(topic);
     }

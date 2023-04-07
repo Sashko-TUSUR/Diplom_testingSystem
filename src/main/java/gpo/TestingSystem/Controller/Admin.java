@@ -35,14 +35,12 @@ public class Admin {
 
         if (ExcelHelper.hasExcelFormat(file)) {
             try {
-                System.out.println("I cat");
                 fileService.save(file);
-                System.out.println("I dog");
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(true, message));
 
             } catch (Exception e) {
-               message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+                message = "Could not upload the file: " + file.getOriginalFilename() + "!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(false, message));
             }
         }
@@ -66,109 +64,113 @@ public class Admin {
         }
     }
 
+
+    //добавление студента
+    @PostMapping("/createStudent")
+    public ResponseEntity<?> createStudent(@RequestBody RequestStudent requestStudent)
+    {
+        userService.createStudent(requestStudent);
+        return ResponseEntity.ok(new ResponseMessage(true, "Студент добавлен"));
+    }
+
+    //редактирование студента
+    @PutMapping("/editStudent")
+    public ResponseEntity<?> editStudent(@RequestBody RequestStudent requestStudent)
+    {
+        userService.editStudent(requestStudent);
+        return ResponseEntity.ok(new ResponseMessage(true, "Студент исправлен"));
+    }
+
+
     //добавление препода *
-    @PostMapping("/Teacher")
-    public ResponseEntity<?> addTeacher(@RequestBody RequestTeacher requestTeacher)
-    {
-        userService.addTeacher(requestTeacher);
-        return ResponseEntity.ok(new ResponseMessage(true,"Преподаватель добавлен"));
+    @PostMapping("/createTeacher")
+    public ResponseEntity<?> createTeacher(@RequestBody RequestTeacher requestTeacher) {
+        userService.createTeacher(requestTeacher);
+        return ResponseEntity.ok(new ResponseMessage(true, "Преподаватель добавлен"));
     }
 
-    //добавление группы *
-    @PostMapping("/addGroup")
-     public ResponseEntity<?> addGroup(@RequestBody RequestGroup requestGroup)
-    {
+    //создание группы *
+    @PostMapping("/createGroup")
+    public ResponseEntity<?> createGroup(@RequestBody RequestGroup requestGroup) {
         try {
-            userService.addGroup(requestGroup);
-            return ResponseEntity.ok(new ResponseMessage(true,"Группа добавлена"));
-        }
-        catch (Exception exception)
-        {
-            return ResponseEntity.ok(new ResponseMessage(false,"Группа с таким номером уже существет!"));
+            userService.createGroup(requestGroup);
+            return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
+        } catch (Exception exception) {
+            return ResponseEntity.ok(new ResponseMessage(false, "Группа с таким номером уже существет!"));
         }
 
     }
+
     //редактирование группы * проверять существует ли уже такая группа
     @PutMapping("/editGroup")
-    public ResponseEntity<?> editGroup(@RequestBody RequestGroup requestGroup)
-    {
+    public ResponseEntity<?> editGroup(@RequestBody RequestGroup requestGroup) {
         userService.renameGroup(requestGroup);
-        return ResponseEntity.ok(new ResponseMessage(true,"Группа переименована"));
+        return ResponseEntity.ok(new ResponseMessage(true, "Группа переименована"));
     }
+
     //удаление группы
     @DeleteMapping("/delGroup")
-    public  ResponseEntity<?> delGroup(@RequestBody RequestGroup requestGroup)
-    {
+    public ResponseEntity<?> delGroup(@RequestBody RequestGroup requestGroup) {
         userService.delGroup(requestGroup);
-        return ResponseEntity.ok(new ResponseMessage(true,"Группа удалена"));
+        return ResponseEntity.ok(new ResponseMessage(true, "Группа удалена"));
     }
 
     //добавление дисциплины *
-    @PostMapping("/addSubject")
-    public ResponseEntity<?> addSubject(@RequestBody RequestSubject requestSubject)
-    {
+    @PostMapping("/createSubject")
+    public ResponseEntity<?> createSubject(@RequestBody RequestSubject requestSubject) {
         try {
-            userService.addSubject(requestSubject);
-            return ResponseEntity.ok(new ResponseMessage(true,"Предмет добавлена"));
-        }
-        catch (Exception exception)
-        {
-            return ResponseEntity.ok(new ResponseMessage(false,"Такой предмет уже существует!"));
+            userService.createSubject(requestSubject);
+            return ResponseEntity.ok(new ResponseMessage(true, "Предмет добавлена"));
+        } catch (Exception exception) {
+            return ResponseEntity.ok(new ResponseMessage(false, "Такой предмет уже существует!"));
         }
 
     }
 
     //редактирование дисциплины *
     @PutMapping("/editSubject")
-    public ResponseEntity<?> editSubject(@RequestBody RequestSubject requestSubject)
-    {
+    public ResponseEntity<?> editSubject(@RequestBody RequestSubject requestSubject) {
         userService.editSubject(requestSubject);
-        return ResponseEntity.ok(new ResponseMessage(true,"Дисциплина изменена"));
+        return ResponseEntity.ok(new ResponseMessage(true, "Дисциплина изменена"));
     }
 
     //удаление дисциплины*
     @DeleteMapping("/delSubject")
-    public ResponseEntity<?> delSubject(@RequestBody RequestSubject requestSubject)
-    {
+    public ResponseEntity<?> delSubject(@RequestBody RequestSubject requestSubject) {
         userService.delSubject(requestSubject);
-        return ResponseEntity.ok(new ResponseMessage(true,"Дисциплина удалена"));
+        return ResponseEntity.ok(new ResponseMessage(true, "Дисциплина удалена"));
     }
 
     //добавление дисциплины группе *ответы поправить
-  @PostMapping("/addSubGroup")
-    public ResponseEntity<?> addSubjectForGroup(@RequestBody RequestAddSubjectForGroup subjectForGroup)
-    {
+    @PostMapping("/addSubGroup")
+    public ResponseEntity<?> addSubjectForGroup(@RequestBody RequestAddSubjectForGroup subjectForGroup) {
         try {
             userService.addSubjectForGroup(subjectForGroup);
-            return ResponseEntity.ok(new ResponseMessage(true,"Группа добавлена"));
-        }
-        catch (Exception exception)
-        {
-            return ResponseEntity.ok(new ResponseMessage(false,"Такой группы не существует!"));
+            return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
+        } catch (Exception exception) {
+            return ResponseEntity.ok(new ResponseMessage(false, "Такой группы не существует!"));
         }
 
     }
 
- //   добавление группы преподу *
+    //   добавление группы преподу *
     @PostMapping("/addGroupTeacher")
-    public ResponseEntity<?> addGroupTeacher(@RequestBody RequestTeacher requestTeacher)
-    {
+    public ResponseEntity<?> addGroupTeacher(@RequestBody RequestTeacher requestTeacher) {
         userService.addGroupTeacher(requestTeacher);
         return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
     }
 
     //удаление пользователя
     @DeleteMapping("/delUser")
-    public ResponseEntity<?> delUser(@RequestBody RequestStudent requestStudent)
-    {
+    public ResponseEntity<?> delUser(@RequestBody RequestStudent requestStudent) {
         userService.delUser(requestStudent);
         return ResponseEntity.ok(new ResponseMessage(true, "Пользователь удалён"));
     }
 
-    /*//редактирование препода
+    //редактирование препода
     @PutMapping("/editTeacher")
-    public void editTeacher(RequestTeacher requestTeacher)
-    {
+    public ResponseEntity<?> editTeacher(@RequestBody RequestTeacher requestTeacher) {
         userService.editTeacher(requestTeacher);
-    }*/
+        return ResponseEntity.ok(new ResponseMessage(true, "Предаватель изменён"));
+    }
 }
