@@ -1,6 +1,8 @@
 package gpo.TestingSystem.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,28 +18,35 @@ import java.util.Set;
 @Table(name = "users")
 @Entity
 public class User {
+
+    @JsonView({Views.Public.class,Views.Internal.class})
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
-
+    @JsonIgnore
     private String login;
+    @JsonIgnore
     private String password;
+    @JsonView({Views.Public.class,Views.Internal.class})
     private String nameUser;
+    @JsonView({Views.Public.class,Views.Internal.class})
     private String patronymic;
-    private String Surname;
+    @JsonView({Views.Public.class,Views.Internal.class})
+    private String surname;
 
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="role_user",joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true,fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Student student;
 
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE},orphanRemoval = true,fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Teacher teacher;
 
 
@@ -47,7 +56,7 @@ public class User {
         this.password = password;
         this.nameUser = nameUser;
         this.patronymic = patronymic;
-        this.Surname = surname;
+        this.surname = surname;
 
     }
 
@@ -92,11 +101,11 @@ public class User {
     }
 
     public String getSurname() {
-        return Surname;
+        return surname;
     }
 
     public void setSurname(String surname) {
-        Surname = surname;
+        surname = surname;
     }
 
     public Set<Role> getRoles() {

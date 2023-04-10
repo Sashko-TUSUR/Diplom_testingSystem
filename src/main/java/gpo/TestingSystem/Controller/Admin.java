@@ -1,13 +1,13 @@
 package gpo.TestingSystem.Controller;
 
-
-
 import gpo.TestingSystem.Models.User;
 import gpo.TestingSystem.Payload.Request.*;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
+import gpo.TestingSystem.Repositories.GroupsRepository;
+import gpo.TestingSystem.Repositories.TeacherRepository;
 import gpo.TestingSystem.Service.Reg.ExcelHelper;
 import gpo.TestingSystem.Service.Reg.ExcelService;
-import gpo.TestingSystem.Service.UserService;
+import gpo.TestingSystem.Service.UserServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,11 @@ public class Admin {
     @Autowired
     ExcelService fileService;
     @Autowired
-    UserService userService;
+    UserServiceAdmin userServiceAdmin;
+    @Autowired
+    TeacherRepository teacherRepository;
+    @Autowired
+    GroupsRepository groupsRepository;
 
 
     //загрузка студентов
@@ -64,36 +68,49 @@ public class Admin {
         }
     }
 
-
     //добавление студента
     @PostMapping("/createStudent")
-    public ResponseEntity<?> createStudent(@RequestBody RequestStudent requestStudent)
-    {
-        userService.createStudent(requestStudent);
+    public ResponseEntity<?> createStudent(@RequestBody RequestStudent requestStudent) {
+        userServiceAdmin.createStudent(requestStudent);
         return ResponseEntity.ok(new ResponseMessage(true, "Студент добавлен"));
     }
 
     //редактирование студента
     @PutMapping("/editStudent")
-    public ResponseEntity<?> editStudent(@RequestBody RequestStudent requestStudent)
-    {
-        userService.editStudent(requestStudent);
+    public ResponseEntity<?> editStudent(@RequestBody RequestStudent requestStudent) {
+        userServiceAdmin.editStudent(requestStudent);
         return ResponseEntity.ok(new ResponseMessage(true, "Студент исправлен"));
     }
-
 
     //добавление препода *
     @PostMapping("/createTeacher")
     public ResponseEntity<?> createTeacher(@RequestBody RequestTeacher requestTeacher) {
-        userService.createTeacher(requestTeacher);
+        userServiceAdmin.createTeacher(requestTeacher);
         return ResponseEntity.ok(new ResponseMessage(true, "Преподаватель добавлен"));
+    }
+
+    //удаление дисциплины у преподавателя*
+    @PostMapping("/delSubForTeach")
+    public ResponseEntity<?> delSubForTeach(@RequestBody RequestTeacher requestTeacher){
+        teacherRepository.delSubForTeach(requestTeacher.getIdUser(),requestTeacher.getIdSubject());
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    //Удаление группы у препода
+    @PostMapping("/delGroupForTeach")
+    public ResponseEntity<?> deGroupForTeach(@RequestBody RequestTeacher requestTeacher)
+    {
+        System.out.println(requestTeacher.getIdUser());
+        System.out.println(requestTeacher.getIdGroup());
+        teacherRepository.delGroupForTeach(requestTeacher.getIdUser(),requestTeacher.getIdGroup());
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     //создание группы *
     @PostMapping("/createGroup")
     public ResponseEntity<?> createGroup(@RequestBody RequestGroup requestGroup) {
         try {
-            userService.createGroup(requestGroup);
+            userServiceAdmin.createGroup(requestGroup);
             return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
         } catch (Exception exception) {
             return ResponseEntity.ok(new ResponseMessage(false, "Группа с таким номером уже существет!"));
@@ -104,14 +121,22 @@ public class Admin {
     //редактирование группы * проверять существует ли уже такая группа
     @PutMapping("/editGroup")
     public ResponseEntity<?> editGroup(@RequestBody RequestGroup requestGroup) {
-        userService.renameGroup(requestGroup);
+        userServiceAdmin.renameGroup(requestGroup);
         return ResponseEntity.ok(new ResponseMessage(true, "Группа переименована"));
+    }
+
+    //удаление дисциплины у группы
+    @PostMapping("/delSubForGroup")
+    public ResponseEntity<?> delSubForGroup(@RequestBody RequestGroup requestGroup)
+    {
+        groupsRepository.delGroupForTeach(requestGroup.getIdSubject(),requestGroup.getIdGroup());
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
     //удаление группы
     @DeleteMapping("/delGroup")
     public ResponseEntity<?> delGroup(@RequestBody RequestGroup requestGroup) {
-        userService.delGroup(requestGroup);
+        userServiceAdmin.delGroup(requestGroup);
         return ResponseEntity.ok(new ResponseMessage(true, "Группа удалена"));
     }
 
@@ -119,7 +144,7 @@ public class Admin {
     @PostMapping("/createSubject")
     public ResponseEntity<?> createSubject(@RequestBody RequestSubject requestSubject) {
         try {
-            userService.createSubject(requestSubject);
+            userServiceAdmin.createSubject(requestSubject);
             return ResponseEntity.ok(new ResponseMessage(true, "Предмет добавлена"));
         } catch (Exception exception) {
             return ResponseEntity.ok(new ResponseMessage(false, "Такой предмет уже существует!"));
@@ -130,14 +155,14 @@ public class Admin {
     //редактирование дисциплины *
     @PutMapping("/editSubject")
     public ResponseEntity<?> editSubject(@RequestBody RequestSubject requestSubject) {
-        userService.editSubject(requestSubject);
+        userServiceAdmin.editSubject(requestSubject);
         return ResponseEntity.ok(new ResponseMessage(true, "Дисциплина изменена"));
     }
 
     //удаление дисциплины*
     @DeleteMapping("/delSubject")
     public ResponseEntity<?> delSubject(@RequestBody RequestSubject requestSubject) {
-        userService.delSubject(requestSubject);
+        userServiceAdmin.delSubject(requestSubject);
         return ResponseEntity.ok(new ResponseMessage(true, "Дисциплина удалена"));
     }
 
@@ -145,7 +170,7 @@ public class Admin {
     @PostMapping("/addSubGroup")
     public ResponseEntity<?> addSubjectForGroup(@RequestBody RequestAddSubjectForGroup subjectForGroup) {
         try {
-            userService.addSubjectForGroup(subjectForGroup);
+            userServiceAdmin.addSubjectForGroup(subjectForGroup);
             return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
         } catch (Exception exception) {
             return ResponseEntity.ok(new ResponseMessage(false, "Такой группы не существует!"));
@@ -156,21 +181,21 @@ public class Admin {
     //   добавление группы преподу *
     @PostMapping("/addGroupTeacher")
     public ResponseEntity<?> addGroupTeacher(@RequestBody RequestTeacher requestTeacher) {
-        userService.addGroupTeacher(requestTeacher);
+        userServiceAdmin.addGroupTeacher(requestTeacher);
         return ResponseEntity.ok(new ResponseMessage(true, "Группа добавлена"));
     }
 
     //удаление пользователя
     @DeleteMapping("/delUser")
     public ResponseEntity<?> delUser(@RequestBody RequestStudent requestStudent) {
-        userService.delUser(requestStudent);
+        userServiceAdmin.delUser(requestStudent);
         return ResponseEntity.ok(new ResponseMessage(true, "Пользователь удалён"));
     }
 
     //редактирование препода
     @PutMapping("/editTeacher")
     public ResponseEntity<?> editTeacher(@RequestBody RequestTeacher requestTeacher) {
-        userService.editTeacher(requestTeacher);
+        userServiceAdmin.editTeacher(requestTeacher);
         return ResponseEntity.ok(new ResponseMessage(true, "Предаватель изменён"));
     }
 }

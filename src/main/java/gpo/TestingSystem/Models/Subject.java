@@ -1,6 +1,7 @@
 package gpo.TestingSystem.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
@@ -25,11 +26,12 @@ public class Subject {
 
     private String name;
 
-    @ManyToMany(mappedBy = "subject",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Teacher> teachers = new ArrayList<>();
-
-   @ManyToMany(mappedBy = "subjects",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-   private List<Groups> groups = new ArrayList<>();
+    @JsonIgnore
+    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Groups> groups = new ArrayList<>();
 
 
     public Long getSubjectId() {

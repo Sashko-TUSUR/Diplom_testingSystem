@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class RequestGroup {
 
     Long idGroup;
+    Long idSubject;
     String numGroup;
 }

@@ -1,6 +1,8 @@
 package gpo.TestingSystem.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
+import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ public class Student {
     @Id
     private Long userId;
 
+    @JsonView(Views.Internal.class)
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     @MapsId

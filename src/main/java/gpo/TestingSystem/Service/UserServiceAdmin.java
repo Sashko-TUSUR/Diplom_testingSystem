@@ -9,6 +9,9 @@ import gpo.TestingSystem.Repositories.*;
 import gpo.TestingSystem.Service.Reg.LoginGeneration;
 import gpo.TestingSystem.Service.Reg.PasswordGeneration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserService {
+public class UserServiceAdmin {
 
     @Autowired
     GroupsRepository groupsRepository;
@@ -75,7 +78,7 @@ public class UserService {
 
     }
 
-    //редактирование студента
+    //редактирование студента *
     public void editStudent(RequestStudent requestStudent)
     {
         User user = userRepository.findById(requestStudent.getIdUser()).get();
@@ -127,53 +130,6 @@ public class UserService {
 
     }
 
-    //добавление группы * ОТВЕТ НА ТО, ЕСЛИ ЕСТЬ УЖЕ ТАКАЯ ГРУППА
-    public void createGroup(RequestGroup requestGroup) {
-        try {
-
-            Groups groups = new Groups();
-            groups.setNumGroup(requestGroup.getNumGroup());
-            groupsRepository.save(groups);
-        } catch (Throwable t) {
-
-        }
-    }
-
-    //добавление дисциплины *
-    public void createSubject(RequestSubject requestSubject) {
-        try {
-            Subject subject = new Subject();
-            subject.setName(requestSubject.getName());
-            subjectRepository.save(subject);
-        } catch (Throwable t) {
-
-        }
-
-    }
-
-    //Редактирование дисциплины * отменить, если уже есть с таким названием
-    public void editSubject(RequestSubject requestSubject) {
-        Subject subject = subjectRepository.findById(requestSubject.getIdSubject()).get();
-
-        subject.setName(requestSubject.getName());
-
-        subjectRepository.save(subject);
-
-    }
-
-    //удаление дисциплины *
-    public void delSubject(RequestSubject requestSubject) {
-        subjectRepository.deleteById(requestSubject.getIdSubject());
-    }
-
-    //добавление группе дисциплину
-    public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup) {
-        Subject subject = subjectRepository.findById(subjectForGroup.getIdSubject()).get();
-        Groups groups = groupsRepository.findById(subjectForGroup.getIdGroup()).get();
-        groups.getSubjects().add(subject);
-        groupsRepository.save(groups);
-    }
-
     //добавление группы преподу *
     public void addGroupTeacher(RequestTeacher requestTeacher) {
 
@@ -213,6 +169,59 @@ public class UserService {
         userRepository.save(user);
 
     }
+
+
+
+    //добавление группы * ОТВЕТ НА ТО, ЕСЛИ ЕСТЬ УЖЕ ТАКАЯ ГРУППА
+    public void createGroup(RequestGroup requestGroup) {
+        try {
+
+            Groups groups = new Groups();
+            groups.setNumGroup(requestGroup.getNumGroup());
+            groupsRepository.save(groups);
+        } catch (Throwable t) {
+
+        }
+    }
+
+    //добавление дисциплины *
+    public void createSubject(RequestSubject requestSubject) {
+        try {
+            Subject subject = new Subject();
+            subject.setName(requestSubject.getName());
+            subjectRepository.save(subject);
+        } catch (Throwable t) {
+
+        }
+
+    }
+
+
+
+    //Редактирование дисциплины * отменить, если уже есть с таким названием
+    public void editSubject(RequestSubject requestSubject) {
+        Subject subject = subjectRepository.findById(requestSubject.getIdSubject()).get();
+
+        subject.setName(requestSubject.getName());
+
+        subjectRepository.save(subject);
+
+    }
+
+    //удаление дисциплины *
+    public void delSubject(RequestSubject requestSubject) {
+        subjectRepository.deleteById(requestSubject.getIdSubject());
+    }
+
+    //добавление группе дисциплину
+    public void addSubjectForGroup(RequestAddSubjectForGroup subjectForGroup) {
+        Subject subject = subjectRepository.findById(subjectForGroup.getIdSubject()).get();
+        Groups groups = groupsRepository.findById(subjectForGroup.getIdGroup()).get();
+        groups.getSubjects().add(subject);
+        groupsRepository.save(groups);
+    }
+
+
 
     // редактирование группы
     public void renameGroup(RequestGroup requestGroup) {

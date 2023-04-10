@@ -1,5 +1,8 @@
 package gpo.TestingSystem.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,18 +24,21 @@ public class Teacher {
     @Id
     private Long userId;
 
+    @JsonView(Views.Public.class)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @MapsId
     private User user;
 
 
+    @JsonView(Views.Internal.class)
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
     @JoinTable(name = "teacher_group",
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "groups_id"))
     private Set<Groups> teacher_group = new HashSet<>();
 
+    @JsonView(Views.Internal.class)
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="teacher_subject",joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))

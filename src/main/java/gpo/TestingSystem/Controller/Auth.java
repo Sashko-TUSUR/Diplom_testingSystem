@@ -13,7 +13,7 @@ import gpo.TestingSystem.Repositories.RoleRepository;
 import gpo.TestingSystem.Repositories.UserRepository;
 import gpo.TestingSystem.Security.Auth.UserDetailsImpl;
 import gpo.TestingSystem.Security.jwt.JwtUtils;
-import gpo.TestingSystem.Service.UserService;
+import gpo.TestingSystem.Service.UserServiceAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -53,7 +53,7 @@ public class Auth {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserService userService;
+    UserServiceAdmin userServiceAdmin;
 
     @Autowired
     JwtUtils jwtUtils;
@@ -106,7 +106,7 @@ public class Auth {
     public ResponseEntity createUser(@RequestBody SignUpRequest signUpRequest) {
 
         System.out.println(signUpRequest.getLogin());
-        userService.createUser(signUpRequest);
+        userServiceAdmin.createUser(signUpRequest);
 
         return ResponseEntity.ok().body(new ResponseMessage(true,"Вы успешно зарегистрированы, далее, произведите авторизацию"));
     }

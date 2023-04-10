@@ -1,6 +1,7 @@
 package gpo.TestingSystem.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,12 +29,14 @@ public class Groups {
 //    @ManyToMany(mappedBy = "teacher_group")
 //    private Set<Teacher> teachers= new HashSet<>();
 
-   @OneToMany(mappedBy = "idGroup", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-   private Set<Student> student = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "idGroup", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private Set<Student> student = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinTable(name="group_subject",joinColumns = @JoinColumn(name = "group_id"),
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "group_subject", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private Set<Subject> subjects = new HashSet<>();
 
