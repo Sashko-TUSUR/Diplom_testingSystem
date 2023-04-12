@@ -16,8 +16,7 @@ public class ExcelService {
     UserRepository userRepository;
     @Autowired
     AddStudent addStudent;
-    @Autowired
-    StudentRepository studentRepository;
+
 
 
     public void save(MultipartFile file) {

@@ -1,6 +1,8 @@
 package gpo.TestingSystem.Controller;
 
 
+
+import com.fasterxml.jackson.annotation.JsonView;
 import gpo.TestingSystem.Exception.TokenRefreshException;
 import gpo.TestingSystem.Models.RefreshToken;
 import gpo.TestingSystem.Models.User;
@@ -9,6 +11,7 @@ import gpo.TestingSystem.Payload.Request.SignUpRequest;
 import gpo.TestingSystem.Payload.Response.JwtResponse;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
 import gpo.TestingSystem.Payload.Response.TokenRefreshResponse;
+import gpo.TestingSystem.Payload.Views;
 import gpo.TestingSystem.Repositories.RoleRepository;
 import gpo.TestingSystem.Repositories.UserRepository;
 import gpo.TestingSystem.Security.Auth.UserDetailsImpl;
@@ -59,8 +62,16 @@ public class Auth {
     JwtUtils jwtUtils;
 
 
+    @JsonView(Views.SignIn.class)
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+       User user= userRepository.findByLogin(loginRequest.getLogin());
+
+        if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword()))
+        {
+            user.setPassword(passwordEncoder.encode(loginRequest.getPassword()));
+        }
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getLogin(), loginRequest.getPassword()));

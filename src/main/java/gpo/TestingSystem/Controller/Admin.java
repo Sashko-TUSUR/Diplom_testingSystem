@@ -1,9 +1,13 @@
 package gpo.TestingSystem.Controller;
 
+import com.lowagie.text.DocumentException;
+import gpo.TestingSystem.Models.Student;
 import gpo.TestingSystem.Models.User;
+import gpo.TestingSystem.Payload.PdfGenerator;
 import gpo.TestingSystem.Payload.Request.*;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
 import gpo.TestingSystem.Repositories.GroupsRepository;
+import gpo.TestingSystem.Repositories.StudentRepository;
 import gpo.TestingSystem.Repositories.TeacherRepository;
 import gpo.TestingSystem.Service.Reg.ExcelHelper;
 import gpo.TestingSystem.Service.Reg.ExcelService;
@@ -15,6 +19,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Validated
@@ -30,7 +39,8 @@ public class Admin {
     TeacherRepository teacherRepository;
     @Autowired
     GroupsRepository groupsRepository;
-
+    @Autowired
+    StudentRepository studentRepository;
 
     //загрузка студентов
     @PostMapping("/upload")
@@ -198,4 +208,19 @@ public class Admin {
         userServiceAdmin.editTeacher(requestTeacher);
         return ResponseEntity.ok(new ResponseMessage(true, "Предаватель изменён"));
     }
+
+
+    @PostMapping("/export-to-pdf")
+    public void generatePdfFile(HttpServletResponse response, @RequestBody RequestStudent requestStudent) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=student" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+        List<Student> listOfStudents = studentRepository.studentInGroup(requestStudent.getIdGroup());
+        PdfGenerator generator = new PdfGenerator();
+        generator.generate(listOfStudents, response);
+    }
+
 }

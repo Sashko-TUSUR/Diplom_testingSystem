@@ -1,6 +1,7 @@
 package gpo.TestingSystem.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
@@ -16,26 +17,26 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity
 public class User {
 
-    @JsonView({Views.Public.class,Views.Internal.class})
+    @JsonView(Views.Public.class)
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
     @JsonIgnore
-    private String login;
-    @JsonIgnore
-    private String password;
-    @JsonView({Views.Public.class,Views.Internal.class})
+    private String login, password;
+
+    @JsonView(Views.Public.class)
     private String nameUser;
-    @JsonView({Views.Public.class,Views.Internal.class})
+    @JsonView(Views.Public.class)
     private String patronymic;
-    @JsonView({Views.Public.class,Views.Internal.class})
+    @JsonView(Views.Public.class)
     private String surname;
 
-    @JsonIgnore
+    @JsonView(Views.SignIn.class)
     @ManyToMany(fetch = FetchType.LAZY ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="role_user",joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -105,7 +106,7 @@ public class User {
     }
 
     public void setSurname(String surname) {
-        surname = surname;
+        this.surname = surname;
     }
 
     public Set<Role> getRoles() {

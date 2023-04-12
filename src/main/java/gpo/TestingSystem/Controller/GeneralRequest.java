@@ -49,7 +49,7 @@ public class GeneralRequest {
 }
 
     //поиск студента по группе
-    @JsonView(Views.Internal.class)
+    @JsonView(Views.Public.class)
     @PostMapping("/studentInGroup")
     public List<Student> listStudent(@RequestBody RequestStudent requestStudent)
     {

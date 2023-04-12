@@ -1,9 +1,7 @@
 package gpo.TestingSystem.Service.Reg;
 
 import gpo.TestingSystem.Enumeration.EnumRole;
-import gpo.TestingSystem.Models.Groups;
 import gpo.TestingSystem.Models.Role;
-import gpo.TestingSystem.Models.Student;
 import gpo.TestingSystem.Models.User;
 import gpo.TestingSystem.Repositories.GroupsRepository;
 import gpo.TestingSystem.Repositories.RoleRepository;

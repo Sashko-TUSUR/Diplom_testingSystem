@@ -1,6 +1,8 @@
 package gpo.TestingSystem.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
 import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
@@ -15,18 +17,20 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "student")
+
 @Entity
 public class Student {
 
+    @JsonIgnore
     @Id
     private Long userId;
 
-    @JsonView(Views.Internal.class)
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     @MapsId
     private User user;
 
+    @JsonIgnore
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "idGroup")
