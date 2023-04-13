@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+import java.util.HashSet;
+import java.util.Set;
 
 
 @NoArgsConstructor
@@ -20,17 +21,14 @@ public class DidacticUnit {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Subject subject;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "SubjectId")
+    private Subject subjectId;
 
-    public Long getDidacticUnitId() {
-        return didacticUnitId;
-    }
+    @OneToMany(mappedBy = "didacticUnit", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private Set<Topic> topic = new HashSet<>();
 
-    public void setDidacticUnitId(Long didacticUnitId) {
-        this.didacticUnitId = didacticUnitId;
-    }
 
     public String getName() {
         return name;
@@ -40,11 +38,20 @@ public class DidacticUnit {
         this.name = name;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public Long getDidacticUnitId() {
+        return didacticUnitId;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setDidacticUnitId(Long didacticUnitId) {
+        this.didacticUnitId = didacticUnitId;
     }
+
+    public Subject getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Subject subjectId) {
+        this.subjectId = subjectId;
+    }
+
 }

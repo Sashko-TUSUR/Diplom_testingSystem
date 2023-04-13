@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class RequestDidacticUnit {
 
     String name;
-    Long id_subject;
-
-
+    Long idSubject;
+    Long idDidactic;
 }

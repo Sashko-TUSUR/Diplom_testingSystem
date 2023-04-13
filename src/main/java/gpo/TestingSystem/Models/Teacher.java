@@ -43,6 +43,7 @@ public class Teacher {
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private Set<Subject> subject = new HashSet<>();
 
+
     public Long getUserId() {
         return userId;
     }

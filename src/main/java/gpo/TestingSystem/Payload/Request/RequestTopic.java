@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class RequestTopic {
 
     String name;
-    Long id_didactic;
+    Long idTopic;
+    Long idDidactic;
 }

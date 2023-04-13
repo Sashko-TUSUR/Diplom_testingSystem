@@ -6,7 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
+import java.util.HashSet;
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -21,8 +22,10 @@ public class Topic {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private DidacticUnit didacticUnit ;
+
+    @ManyToOne(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "didacticUnitId")
+    private DidacticUnit didacticUnit;
 
 
     public Long getTopicId() {
@@ -48,4 +51,6 @@ public class Topic {
     public void setDidacticUnit(DidacticUnit didacticUnit) {
         this.didacticUnit = didacticUnit;
     }
+
 }
+
