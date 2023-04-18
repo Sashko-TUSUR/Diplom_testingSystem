@@ -2,6 +2,7 @@ package gpo.TestingSystem.Models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,12 @@ import java.util.Set;
 @Entity
 public class Groups {
 
+
+    @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idGroup;
-
+    @JsonProperty("label")
     private String numGroup;
 
 //    @ManyToMany(mappedBy = "teacher_group")

@@ -1,11 +1,17 @@
 package gpo.TestingSystem.Controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import gpo.TestingSystem.Models.DidacticUnit;
+import gpo.TestingSystem.Models.Subject;
+import gpo.TestingSystem.Models.Topic;
 import gpo.TestingSystem.Payload.Request.RequestDidacticUnit;
+import gpo.TestingSystem.Payload.Request.RequestSubject;
 import gpo.TestingSystem.Payload.Request.RequestTopic;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
+import gpo.TestingSystem.Payload.Views;
 import gpo.TestingSystem.Repositories.DidacticUnitRepository;
+import gpo.TestingSystem.Repositories.SubjectRepository;
 import gpo.TestingSystem.Repositories.TopicRepository;
 import gpo.TestingSystem.Security.Auth.UserDetailsImpl;
 import gpo.TestingSystem.Service.UserServiceTeacher;
@@ -30,6 +36,9 @@ public class Teacher {
 
     @Autowired
     UserServiceTeacher userServiceTeacher;
+    @Autowired
+    SubjectRepository subjectRepository;
+
 
     //Создание дидактической еденицы
     @PostMapping("/createDidactic")
@@ -84,10 +93,25 @@ public class Teacher {
         return ResponseEntity.ok(new ResponseMessage(true, "Тема обновлена"));
     }
 
-    @GetMapping()
+    //дидактические еденицы препода
+    @GetMapping("/didactic")
     public List<DidacticUnit> didacticUser(@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-       return didacticUnitRepository.findByDidactic(63L);
+       return didacticUnitRepository.findByDidactic(userDetails.getId());
+    }
+
+    // темы препода
+    @GetMapping("/topic")
+    public List<Topic> topicsUser(@RequestBody RequestTopic requestTopic)
+    {
+        return topicRepository.findByTopic(requestTopic.getIdDidactic());
+    }
+
+    //дисциплины препода
+    @GetMapping("/subject")
+    public List<Subject> subjectUser(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        return subjectRepository.findBySubjectTeacher(userDetails.getId());
     }
 
 

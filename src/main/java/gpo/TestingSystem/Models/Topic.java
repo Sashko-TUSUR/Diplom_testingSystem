@@ -1,6 +1,7 @@
 package gpo.TestingSystem.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Topic {
 
     private String name;
 
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "didacticUnitId")
     private DidacticUnit didacticUnit;

@@ -13,7 +13,8 @@ public interface DidacticUnitRepository extends JpaRepository<DidacticUnit,Long>
 
     @Modifying
     @Transactional
-    @Query(value = "Select DISTINCT didactic_unit_id , didactic_unit.name from didactic_unit join subject on didactic_unit.subject_id = subject.subject_id join " +
+    @Query(value = "Select DISTINCT * from didactic_unit join subject on didactic_unit.subject_id = subject.subject_id join " +
             "teacher_subject on subject.subject_id = teacher_subject.subject_id Where teacher_subject.teacher_id =:idUser", nativeQuery = true)
     List<DidacticUnit> findByDidactic(@Param("idUser") Long idUser);
             }
+//didactic_unit.didactic_unit_id, didactic_unit.name

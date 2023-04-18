@@ -53,17 +53,30 @@ public class UserServiceAdmin {
         userRepository.save(user);
     }
 
-    //добавление студента *
+    //добавление студента * добавить проверку на ноль
     public void createStudent (RequestStudent requestStudent)
     {
+        System.out.println(requestStudent.getName());
+        System.out.println(requestStudent.getSurname());
+        System.out.println(requestStudent.getPatronymic());
+        System.out.println(requestStudent.getIdGroup());
+
         Student student = new Student();
         Role role = roleRepository.findByName(EnumRole.ROLE_STUDENT).get();
         User user = new User();
         user.setLogin(LoginGeneration.loginGeneration(requestStudent.getName(), requestStudent.getSurname()));
-        user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
-        user.setNameUser(requestStudent.getName());
-        user.setSurname(requestStudent.getSurname());
-        user.setPatronymic(requestStudent.getPatronymic());
+        user.setPassword(PasswordGeneration.passwordGeneration());
+
+        if (requestStudent.getName() != null) {
+            user.setNameUser(requestStudent.getName());
+        }
+        if (requestStudent.getSurname() != null) {
+            user.setSurname(requestStudent.getSurname());
+        }
+
+        if (requestStudent.getPatronymic() != null) {
+            user.setPatronymic(requestStudent.getPatronymic());
+        }
         user.setRoles(Collections.singleton(role));
 
         if (requestStudent.getIdGroup() != null) {

@@ -22,4 +22,8 @@ public interface TeacherRepository extends JpaRepository<Teacher,Long> {
     @Transactional
     @Query(value = "Delete from teacher_group where teacher_id =:idTeach AND groups_id =:idGroup",nativeQuery = true)
     void  delGroupForTeach(@Param("idTeach") Long idTeach , @Param("idGroup") Long idGroup );
+
+
+
+
 }

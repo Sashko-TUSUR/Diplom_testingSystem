@@ -1,11 +1,16 @@
 package gpo.TestingSystem.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -21,11 +26,12 @@ public class DidacticUnit {
 
     private String name;
 
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "SubjectId")
     private Subject subjectId;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "didacticUnit", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Topic> topic = new HashSet<>();
 
@@ -54,4 +60,11 @@ public class DidacticUnit {
         this.subjectId = subjectId;
     }
 
+    public Set<Topic> getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Set<Topic> topic) {
+        this.topic = topic;
+    }
 }
