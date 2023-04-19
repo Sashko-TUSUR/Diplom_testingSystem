@@ -8,7 +8,7 @@ import gpo.TestingSystem.Payload.Request.*;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
 import gpo.TestingSystem.Repositories.GroupsRepository;
 import gpo.TestingSystem.Repositories.StudentRepository;
-import gpo.TestingSystem.Repositories.TeacherRepository;
+import gpo.TestingSystem.Repositories.UserRepository;
 import gpo.TestingSystem.Service.Reg.ExcelHelper;
 import gpo.TestingSystem.Service.Reg.ExcelService;
 import gpo.TestingSystem.Service.UserServiceAdmin;
@@ -36,7 +36,7 @@ public class Admin {
     @Autowired
     UserServiceAdmin userServiceAdmin;
     @Autowired
-    TeacherRepository teacherRepository;
+    UserRepository userRepository;
     @Autowired
     GroupsRepository groupsRepository;
     @Autowired
@@ -102,7 +102,7 @@ public class Admin {
     //удаление дисциплины у преподавателя*
     @PostMapping("/delSubForTeach")
     public ResponseEntity<?> delSubForTeach(@RequestBody RequestTeacher requestTeacher){
-        teacherRepository.delSubForTeach(requestTeacher.getIdUser(),requestTeacher.getIdSubject());
+        userRepository.delSubForTeach(requestTeacher.getIdUser(),requestTeacher.getIdSubject());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 
@@ -112,7 +112,7 @@ public class Admin {
     {
         System.out.println(requestTeacher.getIdUser());
         System.out.println(requestTeacher.getIdGroup());
-        teacherRepository.delGroupForTeach(requestTeacher.getIdUser(),requestTeacher.getIdGroup());
+        userRepository.delGroupForTeach(requestTeacher.getIdUser(),requestTeacher.getIdGroup());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 

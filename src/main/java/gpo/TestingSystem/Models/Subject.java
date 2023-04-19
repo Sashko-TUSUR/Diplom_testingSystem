@@ -29,7 +29,7 @@ public class Subject {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Teacher> teachers = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
     @JsonIgnore
     @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -60,12 +60,11 @@ public class Subject {
         this.groups = groups;
     }
 
-    public List<Teacher> getTeachers() {
-        return teachers;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
-
 }

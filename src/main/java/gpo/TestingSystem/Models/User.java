@@ -46,12 +46,23 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Student student;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Teacher teacher;
+//    @JsonIgnore
+//    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
+//    private Teacher teacher;
 
 
+    @JsonView(Views.Teacher.class)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
+    @JoinTable(name = "teacher_group",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "groups_id"))
+    private Set<Groups> teacher_group = new HashSet<>();
 
+    @JsonView(Views.Teacher.class)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name="teacher_subject",joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id"))
+    private Set<Subject> subject = new HashSet<>();
 
 
 
@@ -134,11 +145,19 @@ public class User {
         this.student = student;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public Set<Groups> getTeacher_group() {
+        return teacher_group;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacher_group(Set<Groups> teacher_group) {
+        this.teacher_group = teacher_group;
+    }
+
+    public Set<Subject> getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Set<Subject> subject) {
+        this.subject = subject;
     }
 }

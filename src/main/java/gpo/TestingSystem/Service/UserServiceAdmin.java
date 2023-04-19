@@ -33,8 +33,7 @@ public class UserServiceAdmin {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-    @Autowired
-    TeacherRepository teacherRepository;
+
     @Autowired
     SubjectRepository subjectRepository;
     @Autowired
@@ -118,9 +117,8 @@ public class UserServiceAdmin {
     //добавление преподов *
     public void createTeacher(RequestTeacher requestTeacher) {
 
-        Teacher teacher = new Teacher();
-        Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
         User user = new User();
+        Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
         user.setLogin(LoginGeneration.loginGeneration(requestTeacher.getName(), requestTeacher.getSurname()));
         user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
         user.setNameUser(requestTeacher.getName());
@@ -130,27 +128,26 @@ public class UserServiceAdmin {
 
         if (requestTeacher.getIdSubject() != null) {
             Subject subject = subjectRepository.findById(requestTeacher.getIdSubject()).get();
-            teacher.getSubject().add(subject);
+            user.getSubject().add(subject);
         }
         if (requestTeacher.getIdGroup() != null) {
             Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
-            teacher.getTeacher_group().add(groups);
+            user.getTeacher_group().add(groups);
         }
 
         userRepository.save(user);
-        teacher.setUser(user);
-        teacherRepository.save(teacher);
 
     }
 
     //добавление группы преподу *
     public void addGroupTeacher(RequestTeacher requestTeacher) {
 
-        Teacher teacher = teacherRepository.findById(requestTeacher.getIdUser()).get();
+
+        User teacher = userRepository.findById(requestTeacher.getIdUser()).get();
         Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
         teacher.getTeacher_group().add(groups);
 
-        teacherRepository.save(teacher);
+        userRepository.save(teacher);
 
     }
 
@@ -158,7 +155,7 @@ public class UserServiceAdmin {
     public void editTeacher(RequestTeacher requestTeacher) {
 
         User user = userRepository.findById(requestTeacher.getIdUser()).get();
-        Teacher teacher = teacherRepository.findById(user.getUserId()).get();
+
 
         if (requestTeacher.getName() != null) {
             user.setNameUser(requestTeacher.getName());
@@ -172,13 +169,12 @@ public class UserServiceAdmin {
         }
         if (requestTeacher.getIdSubject() != null) {
             Subject subject = subjectRepository.findById(requestTeacher.getIdSubject()).get();
-            teacher.getSubject().add(subject);
+            user.getSubject().add(subject);
         }
         if (requestTeacher.getIdGroup() != null) {
             Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
-            teacher.getTeacher_group().add(groups);
+           user.getTeacher_group().add(groups);
         }
-        teacherRepository.save(teacher);
         userRepository.save(user);
 
     }

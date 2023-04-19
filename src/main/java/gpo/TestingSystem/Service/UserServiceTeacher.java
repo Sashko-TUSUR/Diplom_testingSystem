@@ -22,8 +22,7 @@ public class UserServiceTeacher {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-    @Autowired
-    TeacherRepository teacherRepository;
+
     @Autowired
     SubjectRepository subjectRepository;
     @Autowired

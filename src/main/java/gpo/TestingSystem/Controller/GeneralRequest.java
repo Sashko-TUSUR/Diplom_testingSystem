@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonView;
 import gpo.TestingSystem.Models.Groups;
 import gpo.TestingSystem.Models.Student;
 import gpo.TestingSystem.Models.Subject;
-import gpo.TestingSystem.Models.Teacher;
+
+import gpo.TestingSystem.Models.User;
 import gpo.TestingSystem.Payload.Request.RequestStudent;
 import gpo.TestingSystem.Payload.Views;
 import gpo.TestingSystem.Repositories.GroupsRepository;
 import gpo.TestingSystem.Repositories.StudentRepository;
 import gpo.TestingSystem.Repositories.SubjectRepository;
-import gpo.TestingSystem.Repositories.TeacherRepository;
+
+import gpo.TestingSystem.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +26,10 @@ public class GeneralRequest {
     SubjectRepository subjectRepository;
     @Autowired
     GroupsRepository groupsRepository;
+
     @Autowired
-    TeacherRepository teacherRepository;
+    UserRepository userRepository;
+
     @Autowired
     StudentRepository studentRepository;
 
@@ -43,9 +47,9 @@ public class GeneralRequest {
 
     @JsonView(Views.Public.class)
     @GetMapping("/teachers")
-    public List<Teacher> listTeacher()
+    public List<User> listTeacher()
 {
-    return teacherRepository.findAll();
+    return userRepository.Teachers();
 }
 
     //поиск студента по группе
