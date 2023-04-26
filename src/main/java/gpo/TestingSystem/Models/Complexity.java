@@ -2,6 +2,7 @@ package gpo.TestingSystem.Models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import gpo.TestingSystem.Enumeration.EnumComplexity;
 import lombok.AllArgsConstructor;
 
@@ -16,16 +17,29 @@ import javax.persistence.*;
 @Table(name = "complexity")
 public class Complexity {
 
+    @JsonProperty("id")
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long complexityId;
+
+    @JsonProperty("label")
     @Enumerated(EnumType.STRING)
-    private EnumComplexity enumComplexity;
+    private EnumComplexity name;
 
 
-    public EnumComplexity getEnumComplexity() {
-        return enumComplexity;
+    public Long getComplexityId() {
+        return complexityId;
     }
 
-    public void setEnumComplexity(EnumComplexity enumComplexity) {
-        this.enumComplexity = enumComplexity;
+    public void setComplexityId(Long complexityId) {
+        this.complexityId = complexityId;
+    }
+
+    public EnumComplexity getName() {
+        return name;
+    }
+
+    public void setName(EnumComplexity name) {
+        this.name = name;
     }
 }

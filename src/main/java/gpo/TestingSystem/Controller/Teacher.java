@@ -1,15 +1,15 @@
 package gpo.TestingSystem.Controller;
 
 
-import com.fasterxml.jackson.annotation.JsonView;
+import gpo.TestingSystem.Integrals.Indefinite.RandomNumber;
+import gpo.TestingSystem.Integrals.Indefinite.createIntegral;
 import gpo.TestingSystem.Models.DidacticUnit;
 import gpo.TestingSystem.Models.Subject;
 import gpo.TestingSystem.Models.Topic;
+import gpo.TestingSystem.Payload.Request.QuestionRequest.QuestionMain;
 import gpo.TestingSystem.Payload.Request.RequestDidacticUnit;
-import gpo.TestingSystem.Payload.Request.RequestSubject;
 import gpo.TestingSystem.Payload.Request.RequestTopic;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
-import gpo.TestingSystem.Payload.Views;
 import gpo.TestingSystem.Repositories.DidacticUnitRepository;
 import gpo.TestingSystem.Repositories.SubjectRepository;
 import gpo.TestingSystem.Repositories.TopicRepository;
@@ -38,6 +38,12 @@ public class Teacher {
     UserServiceTeacher userServiceTeacher;
     @Autowired
     SubjectRepository subjectRepository;
+
+    @Autowired
+    createIntegral createInt;
+    @Autowired
+    RandomNumber randomNumber;
+
 
 
     //Создание дидактической еденицы
@@ -111,9 +117,23 @@ public class Teacher {
     @GetMapping("/subject")
     public List<Subject> subjectUser(@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
+        System.out.println(createIntegral.integral().getIntegral());
         return subjectRepository.findBySubjectTeacher(userDetails.getId());
     }
 
+    @GetMapping("/test")
+    public Object integral()
+    {
+        return createIntegral.integral();
 
+    }
+
+    //создание вопроса
+   @PostMapping("/createQuestion")
+   public ResponseEntity<?> createQuestion(@RequestBody QuestionMain questionMain)
+   {
+       userServiceTeacher.createQuestion(questionMain);
+       return ResponseEntity.ok(new ResponseMessage(true, "Вопрос добавлен"));
+   }
 
 }

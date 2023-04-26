@@ -20,11 +20,23 @@ public class Question {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "topicId")
     private Topic topic ;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "complexityId")
     private Complexity complexities ;
+
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "typeQuestionId")
+    private TypeQuestion typeQuestion;
+
+
+
 
 
     public Long getQuestionId() {
@@ -57,5 +69,21 @@ public class Question {
 
     public void setComplexities(Complexity complexities) {
         this.complexities = complexities;
+    }
+
+    public TypeQuestion getTypeQuestion() {
+        return typeQuestion;
+    }
+
+    public void setTypeQuestion(TypeQuestion typeQuestion) {
+        this.typeQuestion = typeQuestion;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
