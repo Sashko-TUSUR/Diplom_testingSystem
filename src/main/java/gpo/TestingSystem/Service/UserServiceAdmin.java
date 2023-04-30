@@ -128,7 +128,7 @@ public class UserServiceAdmin {
 
         if (requestTeacher.getIdSubject() != null) {
             Subject subject = subjectRepository.findById(requestTeacher.getIdSubject()).get();
-            user.getSubject().add(subject);
+            user.getSubjects().add(subject);
         }
         if (requestTeacher.getIdGroup() != null) {
             Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();
@@ -169,7 +169,7 @@ public class UserServiceAdmin {
         }
         if (requestTeacher.getIdSubject() != null) {
             Subject subject = subjectRepository.findById(requestTeacher.getIdSubject()).get();
-            user.getSubject().add(subject);
+            user.getSubjects().add(subject);
         }
         if (requestTeacher.getIdGroup() != null) {
             Groups groups = groupsRepository.findById(requestTeacher.getIdGroup()).get();

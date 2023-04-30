@@ -72,12 +72,6 @@ public class UserServiceTeacher {
     // создание вопроса
     public void createQuestion(QuestionMain questionMainRequest) {
 
-//        System.out.println(questionMainRequest.getQuestionMultiple().getCountAnswers());
-//        System.out.println(questionMainRequest.getTitle());
-//        System.out.println(questionMainRequest.getQuestionMultiple().getTruAnswer());
-//        for(int i=0;i<2;i++)
-//        System.out.println(questionMainRequest.getQuestionMultiple().getAnswers()[i]);
-
         Question question = new Question();
         TypeQuestion typeQuestion = typeQuestionRepo.findById(questionMainRequest.getIdTypeQuestion()).get();
         Complexity complexity = complexityRepository.findById(questionMainRequest.getIdComplexity()).get();
@@ -95,7 +89,6 @@ public class UserServiceTeacher {
             answer.setQuestion(question);
             answersRepo.save(answer);
         }
-
 
         if (typeQuestion.getId() == 2) {
 

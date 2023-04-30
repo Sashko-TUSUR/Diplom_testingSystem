@@ -32,5 +32,11 @@ public interface UserRepository extends JpaRepository <User,Long>{
  @Query(value = "Select * from users join role_user on users.user_id = role_user.user_id where role_user.role_id = 3",nativeQuery = true)
  List<User> Teachers();
 
+ //конкретный преподаватель
+ @Modifying
+ @Transactional
+ @Query(value = " Select *  from users join role_user on users.user_id = role_user.user_id where role_user.role_id = 3" +
+         " and users.user_id =:idUser",nativeQuery = true)
+ List<User> oneTeacher(@Param("idUser") Long idUser);
 
 }

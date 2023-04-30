@@ -1,9 +1,7 @@
 package gpo.TestingSystem.Models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 
@@ -25,12 +23,14 @@ public class Student {
     @Id
     private Long userId;
 
+    @JsonUnwrapped
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     @MapsId
     private User user;
 
-    @JsonIgnore
+
+    @JsonProperty("Group")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "idGroup")

@@ -8,6 +8,7 @@ import gpo.TestingSystem.Models.Subject;
 import gpo.TestingSystem.Models.Topic;
 import gpo.TestingSystem.Payload.Request.QuestionRequest.QuestionMain;
 import gpo.TestingSystem.Payload.Request.RequestDidacticUnit;
+import gpo.TestingSystem.Payload.Request.RequestSubject;
 import gpo.TestingSystem.Payload.Request.RequestTopic;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
 import gpo.TestingSystem.Repositories.DidacticUnitRepository;
@@ -101,9 +102,9 @@ public class Teacher {
 
     //дидактические еденицы препода
     @GetMapping("/didactic")
-    public List<DidacticUnit> didacticUser(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    public List<DidacticUnit> didacticUser(@RequestBody RequestSubject requestSubject)
     {
-       return didacticUnitRepository.findByDidactic(userDetails.getId());
+       return didacticUnitRepository.findByDidactic(requestSubject.getIdSubject());
     }
 
     // темы препода

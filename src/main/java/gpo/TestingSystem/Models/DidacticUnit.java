@@ -1,6 +1,7 @@
 package gpo.TestingSystem.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
@@ -20,10 +21,12 @@ import java.util.Set;
 @Table(name = "didacticUnit")
 public class DidacticUnit {
 
+    @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long didacticUnitId;
 
+    @JsonProperty("label")
     private String name;
 
     @JsonIgnore

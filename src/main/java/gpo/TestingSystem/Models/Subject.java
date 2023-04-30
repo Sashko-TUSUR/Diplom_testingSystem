@@ -2,6 +2,7 @@ package gpo.TestingSystem.Models;
 
 
 import com.fasterxml.jackson.annotation.*;
+import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
@@ -24,11 +25,14 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long subjectId;
 
+
+    @JsonView(Views.Teacher.class)
     @JsonProperty("label")
     private String name;
 
+
     @JsonIgnore
-    @ManyToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
 
     @JsonIgnore

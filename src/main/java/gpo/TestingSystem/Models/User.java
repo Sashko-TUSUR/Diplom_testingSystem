@@ -1,8 +1,6 @@
 package gpo.TestingSystem.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +19,8 @@ import java.util.Set;
 @Entity
 public class User {
 
-    @JsonView(Views.Public.class)
+
+    @JsonView({Views.Public.class})
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
@@ -29,11 +28,16 @@ public class User {
     @JsonIgnore
     private String login, password;
 
-    @JsonView(Views.Public.class)
+    @JsonProperty("name")
+    @JsonView({Views.Public.class,Views.Student.class})
     private String nameUser;
-    @JsonView(Views.Public.class)
+
+    @JsonProperty("middleName")
+    @JsonView({Views.Public.class,Views.Student.class})
     private String patronymic;
-    @JsonView(Views.Public.class)
+
+    @JsonProperty("lastName")
+    @JsonView({Views.Public.class,Views.Student.class})
     private String surname;
 
     @JsonView(Views.SignIn.class)
@@ -50,7 +54,7 @@ public class User {
 //    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
 //    private Teacher teacher;
 
-
+    @JsonProperty("groups")
     @JsonView(Views.Teacher.class)
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},fetch = FetchType.LAZY)
     @JoinTable(name = "teacher_group",
@@ -58,17 +62,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "groups_id"))
     private Set<Groups> teacher_group = new HashSet<>();
 
+    @JsonProperty("disciplines")
     @JsonView(Views.Teacher.class)
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name="teacher_subject",joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    private Set<Subject> subject = new HashSet<>();
-
-
-
-
-
-
+    private Set<Subject> subjects = new HashSet<>();
 
 
     public User(Long userId, String login, String password, String nameUser, String patronymic, String surname) {
@@ -153,11 +152,11 @@ public class User {
         this.teacher_group = teacher_group;
     }
 
-    public Set<Subject> getSubject() {
-        return subject;
+    public Set<Subject> getSubjects() {
+        return subjects;
     }
 
-    public void setSubject(Set<Subject> subject) {
-        this.subject = subject;
+    public void setSubjects(Set<Subject> subjects) {
+        this.subjects = subjects;
     }
 }

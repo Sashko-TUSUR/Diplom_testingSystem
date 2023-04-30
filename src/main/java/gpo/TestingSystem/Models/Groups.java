@@ -2,7 +2,10 @@ package gpo.TestingSystem.Models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +21,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "groups")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+
 @Entity
 public class Groups {
 
@@ -26,12 +31,10 @@ public class Groups {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idGroup;
+
+    @JsonView({Views.Student.class,Views.Subject.class, Views.Public.class})
     @JsonProperty("label")
     private String numGroup;
-
-//    @ManyToMany(mappedBy = "teacher_group")
-//    private Set<Teacher> teachers= new HashSet<>();
-
 
     @JsonIgnore
     @OneToMany(mappedBy = "idGroup", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
