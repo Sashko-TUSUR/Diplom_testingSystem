@@ -173,6 +173,7 @@ public class Admin {
     @DeleteMapping("/delSubject")
     public ResponseEntity<?> delSubject(@RequestBody RequestSubject requestSubject) {
         userServiceAdmin.delSubject(requestSubject);
+
         return ResponseEntity.ok(new ResponseMessage(true, "Дисциплина удалена"));
     }
 

@@ -55,6 +55,5 @@ public class Topic {
     public void setDidacticUnit(DidacticUnit didacticUnit) {
         this.didacticUnit = didacticUnit;
     }
-
 }
 

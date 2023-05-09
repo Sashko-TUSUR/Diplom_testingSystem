@@ -8,6 +8,7 @@ public class Views {
    public static class Student{};
    public static class Didactic{};
    public static class Subject{};
+   public static class SubjectGroup{};
    //public static class
 
 }

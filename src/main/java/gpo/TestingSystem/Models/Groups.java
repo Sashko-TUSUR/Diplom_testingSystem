@@ -1,10 +1,7 @@
 package gpo.TestingSystem.Models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +19,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "groups")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-
 @Entity
 public class Groups {
 
@@ -40,8 +36,8 @@ public class Groups {
     @OneToMany(mappedBy = "idGroup", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private Set<Student> student = new HashSet<>();
 
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonUnwrapped
+    @ManyToMany(fetch = FetchType.LAZY ,cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
     @JoinTable(name = "group_subject", joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private Set<Subject> subjects = new HashSet<>();

@@ -29,7 +29,6 @@ public class Student {
     @MapsId
     private User user;
 
-
     @JsonProperty("Group")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

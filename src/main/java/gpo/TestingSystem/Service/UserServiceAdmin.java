@@ -119,9 +119,11 @@ public class UserServiceAdmin {
 
         User user = new User();
         Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
+
         user.setLogin(LoginGeneration.loginGeneration(requestTeacher.getName(), requestTeacher.getSurname()));
         user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
         user.setNameUser(requestTeacher.getName());
+
         user.setSurname(requestTeacher.getSurname());
         user.setPatronymic(requestTeacher.getPatronymic());
         user.setRoles(Collections.singleton(role));
@@ -209,7 +211,7 @@ public class UserServiceAdmin {
 
     //Редактирование дисциплины * отменить, если уже есть с таким названием
     public void editSubject(RequestSubject requestSubject) {
-        Subject subject = subjectRepository.findById(requestSubject.getIdSubject()).get();
+        Subject subject = subjectRepository.findById(requestSubject.getId()).get();
 
         subject.setName(requestSubject.getName());
 
@@ -219,7 +221,7 @@ public class UserServiceAdmin {
 
     //удаление дисциплины *
     public void delSubject(RequestSubject requestSubject) {
-        subjectRepository.deleteById(requestSubject.getIdSubject());
+        subjectRepository.deleteById(requestSubject.getId());
     }
 
     //добавление группе дисциплину

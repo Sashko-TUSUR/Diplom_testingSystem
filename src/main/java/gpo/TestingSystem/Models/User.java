@@ -40,19 +40,21 @@ public class User {
     @JsonView({Views.Public.class,Views.Student.class})
     private String surname;
 
+//
+//    @ManyToMany(fetch = FetchType.LAZY ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable(name="role_user",joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    private Set<Role> roles = new HashSet<>();
+
     @JsonView(Views.SignIn.class)
-    @ManyToMany(fetch = FetchType.LAZY ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name="role_user",joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "roleId")
+    private  Role role;
+
 
     @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Student student;
-
-//    @JsonIgnore
-//    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
-//    private Teacher teacher;
 
     @JsonProperty("groups")
     @JsonView(Views.Teacher.class)
@@ -128,12 +130,12 @@ public class User {
         this.surname = surname;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Student getStudent() {

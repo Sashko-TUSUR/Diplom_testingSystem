@@ -1,11 +1,9 @@
 package gpo.TestingSystem.Controller;
 
 
-import gpo.TestingSystem.Integrals.Indefinite.RandomNumber;
-import gpo.TestingSystem.Integrals.Indefinite.createIntegral;
+import gpo.TestingSystem.Integrals.Indefinite.indefiniteIntegral;
 import gpo.TestingSystem.Models.DidacticUnit;
 import gpo.TestingSystem.Models.Subject;
-import gpo.TestingSystem.Models.Topic;
 import gpo.TestingSystem.Payload.Request.QuestionRequest.QuestionMain;
 import gpo.TestingSystem.Payload.Request.RequestDidacticUnit;
 import gpo.TestingSystem.Payload.Request.RequestSubject;
@@ -39,11 +37,9 @@ public class Teacher {
     UserServiceTeacher userServiceTeacher;
     @Autowired
     SubjectRepository subjectRepository;
+    @Autowired
+    indefiniteIntegral indefiniteIntegral;
 
-    @Autowired
-    createIntegral createInt;
-    @Autowired
-    RandomNumber randomNumber;
 
 
 
@@ -101,31 +97,31 @@ public class Teacher {
     }
 
     //дидактические еденицы препода
-    @GetMapping("/didactic")
+    @PostMapping("/didactic")
     public List<DidacticUnit> didacticUser(@RequestBody RequestSubject requestSubject)
     {
-       return didacticUnitRepository.findByDidactic(requestSubject.getIdSubject());
+       return didacticUnitRepository.findByDidactic(requestSubject.getId());
     }
 
-    // темы препода
-    @GetMapping("/topic")
-    public List<Topic> topicsUser(@RequestBody RequestTopic requestTopic)
-    {
-        return topicRepository.findByTopic(requestTopic.getIdDidactic());
-    }
+//    // темы препода
+//    @GetMapping("/topic")
+//    public List<Topic> topicsUser(@RequestBody RequestTopic requestTopic)
+//    {
+//        return topicRepository.findByTopic(requestTopic.getIdDidactic());
+//    }
 
     //дисциплины препода
     @GetMapping("/subject")
     public List<Subject> subjectUser(@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
-        System.out.println(createIntegral.integral().getIntegral());
         return subjectRepository.findBySubjectTeacher(userDetails.getId());
     }
 
     @GetMapping("/test")
     public Object integral()
     {
-        return createIntegral.integral();
+        System.out.println("я пришёл");
+        return gpo.TestingSystem.Integrals.Indefinite.indefiniteIntegral.iTask();
 
     }
 

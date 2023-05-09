@@ -82,6 +82,10 @@ public class UserServiceTeacher {
 
         question.setComplexities(complexity);
 
+        //ПРОПИСАТЬ УСЛОВИЯ ЕСЛИ БУДУТ ПУСТЫЕ ПРИХОДИТЬ
+
+
+        //TRU/FALSE
         if (typeQuestion.getId() == 1) {
 
             Answers answer = new Answers();
@@ -90,6 +94,7 @@ public class UserServiceTeacher {
             answersRepo.save(answer);
         }
 
+        //MULTIPLE
         if (typeQuestion.getId() == 2) {
 
             for (int i = 0; i < questionMainRequest.getQuestionMultiple().getCountAnswers(); i++) {
@@ -109,6 +114,13 @@ public class UserServiceTeacher {
             }
 
         }
+
+        //INTEGRAL
+        if(typeQuestion.getId()==3)
+        {
+
+        }
+
 
         questionRepository.save(question);
 

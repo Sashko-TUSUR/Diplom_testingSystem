@@ -66,12 +66,6 @@ public class GeneralRequest {
         return complexityRepository.findAll();
     }
 
-    @JsonView(Views.Student.class)
-    @PostMapping("/student")
-    public Optional<Student> studentList(@RequestBody RequestStudent requestStudent)
-    {
-        return studentRepository.findById(requestStudent.getIdUser());
-    }
 
     //иноформация о преподавателе
     @JsonView(Views.Teacher.class)

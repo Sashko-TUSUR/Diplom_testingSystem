@@ -20,23 +20,24 @@ import java.util.Set;
 @Table(name = "subject")
 public class Subject {
 
+
+    @JsonView(Views.SubjectGroup.class)
     @JsonProperty("id")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long subjectId;
 
 
-    @JsonView(Views.Teacher.class)
+    @JsonView({Views.Teacher.class,Views.SubjectGroup.class})
     @JsonProperty("label")
     private String name;
 
-
     @JsonIgnore
-    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "subjects",  cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "subjects", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "subjects", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY )
     private List<Groups> groups = new ArrayList<>();
 
 
