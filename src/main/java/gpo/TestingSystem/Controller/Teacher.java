@@ -2,16 +2,14 @@ package gpo.TestingSystem.Controller;
 
 
 import gpo.TestingSystem.Integrals.Indefinite.indefiniteIntegral;
-import gpo.TestingSystem.Models.DidacticUnit;
-import gpo.TestingSystem.Models.Subject;
+import gpo.TestingSystem.Models.*;
 import gpo.TestingSystem.Payload.Request.QuestionRequest.QuestionMain;
 import gpo.TestingSystem.Payload.Request.RequestDidacticUnit;
 import gpo.TestingSystem.Payload.Request.RequestSubject;
+import gpo.TestingSystem.Payload.Request.RequestTest;
 import gpo.TestingSystem.Payload.Request.RequestTopic;
 import gpo.TestingSystem.Payload.Response.ResponseMessage;
-import gpo.TestingSystem.Repositories.DidacticUnitRepository;
-import gpo.TestingSystem.Repositories.SubjectRepository;
-import gpo.TestingSystem.Repositories.TopicRepository;
+import gpo.TestingSystem.Repositories.*;
 import gpo.TestingSystem.Security.Auth.UserDetailsImpl;
 import gpo.TestingSystem.Service.UserServiceTeacher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/teacher")
@@ -39,9 +38,12 @@ public class Teacher {
     SubjectRepository subjectRepository;
     @Autowired
     indefiniteIntegral indefiniteIntegral;
-
-
-
+    @Autowired
+    QuestionRepository questionRepository;
+    @Autowired
+    TestRepository testRepository;
+    @Autowired
+    AnswersRepo answersRepo;
 
     //Создание дидактической еденицы
     @PostMapping("/createDidactic")
@@ -132,5 +134,55 @@ public class Teacher {
        userServiceTeacher.createQuestion(questionMain);
        return ResponseEntity.ok(new ResponseMessage(true, "Вопрос добавлен"));
    }
+
+   // удаление вопроса
+    @DeleteMapping("/delQuestion")
+    public ResponseEntity<?> delQuestion(@RequestBody QuestionMain questionMain)
+    {
+
+        questionRepository.deleteById(questionMain.getId());
+        return ResponseEntity.ok(new ResponseMessage(true, "Вопрос удалён"));
+    }
+
+    // создание теста
+    @PostMapping("/createTest")
+    public ResponseEntity<?> createTest(@RequestBody RequestTest requestTest)
+    {
+        userServiceTeacher.createTest(requestTest);
+        return ResponseEntity.ok(new ResponseMessage(true, "тест создан"));
+    }
+    // редактирование теста
+    @PutMapping("/editTest")
+    public ResponseEntity<?> editTest(@RequestBody RequestTest requestTest)
+    {
+        userServiceTeacher.editTest(requestTest);
+        return ResponseEntity.ok(new ResponseMessage(true, "тест изменён"));
+    }
+    // удаление теста
+
+    @DeleteMapping("/delTest")
+    public ResponseEntity<?> delTest(@RequestBody RequestTest requestTest)
+    {
+        testRepository.deleteById(requestTest.getId());
+        return ResponseEntity.ok(new ResponseMessage(true, "тест удалён" ));
+    }
+
+
+
+    @GetMapping("/getQuestion")
+    public List<Question> allQuestion()
+    {
+        return questionRepository.findAll();
+    }
+
+    @GetMapping("/getTest")
+    public List<Test> allTest()
+    {
+
+        return testRepository.findAll();
+    }
+
+
+
 
 }

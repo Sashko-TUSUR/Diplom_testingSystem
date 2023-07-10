@@ -2,6 +2,7 @@ package gpo.TestingSystem.Models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Table(name = "topic")
 public class Topic {
 
@@ -30,6 +32,7 @@ public class Topic {
     @ManyToOne(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "didacticUnitId")
     private DidacticUnit didacticUnit;
+
 
 
     public Long getTopicId() {

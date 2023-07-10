@@ -1,26 +1,16 @@
 package gpo.TestingSystem.Service;
 
 import gpo.TestingSystem.Enumeration.EnumRole;
-import gpo.TestingSystem.Exception.ResourceNotFoundException;
 import gpo.TestingSystem.Models.*;
 import gpo.TestingSystem.Payload.Request.*;
-import gpo.TestingSystem.Payload.Response.ResponseMessage;
 import gpo.TestingSystem.Repositories.*;
 import gpo.TestingSystem.Service.Reg.LoginGeneration;
 import gpo.TestingSystem.Service.Reg.PasswordGeneration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceAdmin {
@@ -33,7 +23,6 @@ public class UserServiceAdmin {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-
     @Autowired
     SubjectRepository subjectRepository;
     @Autowired
@@ -48,7 +37,7 @@ public class UserServiceAdmin {
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
 
         Role roles = roleRepository.findByName(EnumRole.ROLE_ADMIN).get();
-        user.setRoles(Collections.singleton(roles));
+        user.setRole(roles);
         userRepository.save(user);
     }
 
@@ -76,7 +65,7 @@ public class UserServiceAdmin {
         if (requestStudent.getPatronymic() != null) {
             user.setPatronymic(requestStudent.getPatronymic());
         }
-        user.setRoles(Collections.singleton(role));
+        user.setRole(role);
 
         if (requestStudent.getIdGroup() != null) {
             Groups groups = groupsRepository.findById(requestStudent.getIdGroup()).get();
@@ -121,12 +110,12 @@ public class UserServiceAdmin {
         Role role = roleRepository.findByName(EnumRole.ROLE_TEACHER).get();
 
         user.setLogin(LoginGeneration.loginGeneration(requestTeacher.getName(), requestTeacher.getSurname()));
-        user.setPassword(encoder.encode(PasswordGeneration.passwordGeneration()));
+        user.setPassword(PasswordGeneration.passwordGeneration());
         user.setNameUser(requestTeacher.getName());
 
         user.setSurname(requestTeacher.getSurname());
         user.setPatronymic(requestTeacher.getPatronymic());
-        user.setRoles(Collections.singleton(role));
+        user.setRole(role);
 
         if (requestTeacher.getIdSubject() != null) {
             Subject subject = subjectRepository.findById(requestTeacher.getIdSubject()).get();
@@ -181,8 +170,6 @@ public class UserServiceAdmin {
 
     }
 
-
-
     //добавление группы * ОТВЕТ НА ТО, ЕСЛИ ЕСТЬ УЖЕ ТАКАЯ ГРУППА
     public void createGroup(RequestGroup requestGroup) {
         try {
@@ -207,8 +194,6 @@ public class UserServiceAdmin {
 
     }
 
-
-
     //Редактирование дисциплины * отменить, если уже есть с таким названием
     public void editSubject(RequestSubject requestSubject) {
         Subject subject = subjectRepository.findById(requestSubject.getId()).get();
@@ -231,8 +216,6 @@ public class UserServiceAdmin {
         groups.getSubjects().add(subject);
         groupsRepository.save(groups);
     }
-
-
 
     // редактирование группы
     public void renameGroup(RequestGroup requestGroup) {

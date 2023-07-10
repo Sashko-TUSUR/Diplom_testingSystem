@@ -11,8 +11,13 @@ import java.util.List;
 
 public interface DidacticUnitRepository extends JpaRepository<DidacticUnit,Long> {
 
+    //дидактические единицы в предмете
     @Modifying
     @Transactional
     @Query(value = "Select DISTINCT * from didactic_unit join subject on didactic_unit.subject_id = subject.subject_id Where subject.subject_id =:idSubject", nativeQuery = true)
     List<DidacticUnit> findByDidactic(@Param("idSubject") Long idSubject);
-            }
+
+
+
+    }
+

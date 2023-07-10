@@ -21,11 +21,11 @@ public class AddStudent {
     StudentRepository studentRepository;
 
 
-    public void addStudent(List<User> userList) {
+    public void addStudent(List<User> userList , Long idGroup) {
 
         List<Student> students = new ArrayList<Student>();
-        String numGroup = ExcelHelper.numGroup;
-        Groups groups = groupsRepository.findByNumGroup(numGroup);
+        Groups groups = groupsRepository.findById(idGroup).get();
+
         for(int i=0;i< userList.size();i++)
         {
             Student student = new Student();

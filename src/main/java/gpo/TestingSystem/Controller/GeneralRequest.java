@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/request")
@@ -30,6 +29,10 @@ public class GeneralRequest {
     ComplexityRepository complexityRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    TestRepository testRepository;
+    @Autowired
+    QuestionRepository questionRepository;
 
     @GetMapping("/subjects")
     public List<Subject> listSubject()
@@ -66,7 +69,6 @@ public class GeneralRequest {
         return complexityRepository.findAll();
     }
 
-
     //иноформация о преподавателе
     @JsonView(Views.Teacher.class)
     @PostMapping("/teacher")
@@ -75,5 +77,18 @@ public class GeneralRequest {
         return userRepository.oneTeacher(requestTeacher.getIdUser());
     }
 
+    //тесты в теме
+    @GetMapping("test/{id}")
+    public List<Test> testInTopic(@PathVariable(value = "id") Long id)
+    {
+       return testRepository.testInTopic(id);
+    }
+
+    //вопросы в теме
+    @GetMapping("question/{id}")
+    public List<Question> testQInTest(@PathVariable(value = "id") Long id)
+    {
+        return questionRepository.findByQuestion(id);
+    }
 
 }

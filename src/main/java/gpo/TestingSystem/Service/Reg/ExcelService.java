@@ -19,14 +19,18 @@ public class ExcelService {
 
 
 
-    public void save(MultipartFile file) {
+    public void save(MultipartFile file , Long idGroup) {
         try {
+
+            System.out.println("excelService");
+
             List<User> users = ExcelHelper.excelToUsers(file.getInputStream());
 
             userRepository.saveAll(users);
-            addStudent.addStudent(users);
+            addStudent.addStudent(users,idGroup);
 
         } catch (IOException e) {
+            System.out.println("excelServiceError");
             throw new RuntimeException("fail to store excel data: " + e.getMessage());
 
         }

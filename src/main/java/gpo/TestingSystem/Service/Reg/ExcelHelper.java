@@ -21,11 +21,10 @@ import java.util.List;
 @Component
 public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] HEADERs = { "Имя", "Фамилия", "Отчество", "Группа" };
+    static String[] HEADERs = { "Имя", "Фамилия", "Отчество" };
     static String SHEET = "users";
     static String name;
     static String surname;
-    static String numGroup;
 
     public static RoleRepository roleRepository;
     public static GroupsRepository groupsRepository;
@@ -35,13 +34,13 @@ public class ExcelHelper {
     private ExcelHelper(RoleRepository roleRepository,GroupsRepository groupsRepository,StudentRepository studentRepository)
     {
         ExcelHelper.roleRepository=roleRepository;
-        ExcelHelper.groupsRepository=groupsRepository;
+        ExcelHelper.groupsRepository = groupsRepository;
         ExcelHelper.studentRepository=studentRepository;
     }
 
 
     public static boolean hasExcelFormat(MultipartFile file) {
-
+        System.out.println("hasExcelFormat");
         return TYPE.equals(file.getContentType());
     }
 
@@ -85,17 +84,13 @@ public class ExcelHelper {
                             user.setSurname(currentCell.getStringCellValue());
                         }
                         case 2 -> user.setPatronymic(currentCell.getStringCellValue());
-                        case 3 -> {
-                            currentCell.setCellType(CellType.STRING);
-                            numGroup = currentCell.getStringCellValue();
-                        }
                         default -> {
                         }
                     }
 
                     cellIdx++;
                 }
-                user.setRoles(Collections.singleton(role));
+                user.setRole(role);
                 user.setLogin(LoginGeneration.loginGeneration(name, surname));
                 user.setPassword(PasswordGeneration.passwordGeneration());
                 users.add(user);

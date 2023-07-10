@@ -2,6 +2,7 @@ package gpo.TestingSystem.Models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import gpo.TestingSystem.Enumeration.EnumComplexity;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Table(name = "complexity")
 public class Complexity {
 

@@ -46,11 +46,14 @@ public class Admin {
     @PostMapping("/upload")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
-
+        Long idGroup = Long.valueOf(3);
+        System.out.println(idGroup);
         if (ExcelHelper.hasExcelFormat(file)) {
+
             try {
-                fileService.save(file);
+                fileService.save(file, idGroup);
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
+
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(true, message));
 
             } catch (Exception e) {

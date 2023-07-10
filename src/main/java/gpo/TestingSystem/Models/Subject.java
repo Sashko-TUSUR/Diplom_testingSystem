@@ -6,6 +6,7 @@ import gpo.TestingSystem.Payload.Views;
 import lombok.AllArgsConstructor;
 
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -40,6 +41,10 @@ public class Subject {
     @ManyToMany(mappedBy = "subjects", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY )
     private List<Groups> groups = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<DidacticUnit> didacticUnits;
+
 
     public Long getSubjectId() {
         return subjectId;
@@ -71,5 +76,13 @@ public class Subject {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public List<DidacticUnit> getDidacticUnits() {
+        return didacticUnits;
+    }
+
+    public void setDidacticUnits(List<DidacticUnit> didacticUnits) {
+        this.didacticUnits = didacticUnits;
     }
 }

@@ -7,7 +7,7 @@ public class CreateVariants {
 
     public static String variant1()
     {
-        return "\\frac{f \\cdot (x^{b})}{a}";
+        return "\\frac{' + f + '\\cdot (x^{' + b + '})}{' + a + '}";
     }
 
     public static String generateFormula(boolean includeFrac) {
@@ -15,10 +15,10 @@ public class CreateVariants {
         // Список переменных {
         // Список переменных
         ArrayList<String> variables = new ArrayList<>();
-        variables.add("a");
-        variables.add("x^{b}");
-        variables.add("f");
-        variables.add("k");
+        variables.add("' + a + '");
+        variables.add("x");
+        variables.add("' + f ^ {' + b + '} + '");
+        variables.add("' + k + '");
 
         // Перемешиваем список переменных
         Collections.shuffle(variables);

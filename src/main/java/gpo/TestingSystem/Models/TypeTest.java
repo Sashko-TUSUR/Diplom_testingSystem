@@ -1,42 +1,41 @@
 package gpo.TestingSystem.Models;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import gpo.TestingSystem.Enumeration.EnumTypeQuestion;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import gpo.TestingSystem.Enumeration.EnumTypeIntegral;
+import gpo.TestingSystem.Enumeration.EnumTypeTest;
 
 import javax.persistence.*;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "TypeQuestion")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class TypeQuestion {
+@Table(name = "typeTest")
+public class TypeTest {
 
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long id;
 
+    @JsonProperty("label")
     @Enumerated(EnumType.STRING)
-    private EnumTypeQuestion name;
+    private EnumTypeTest name;
 
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
-    public EnumTypeQuestion getName() {
+    public EnumTypeTest getName() {
         return name;
     }
 
-    public void setName(EnumTypeQuestion name) {
+    public void setName(EnumTypeTest name) {
         this.name = name;
     }
 }
